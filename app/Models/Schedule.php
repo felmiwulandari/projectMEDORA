@@ -17,8 +17,8 @@ class Schedule extends Model
         'status',
     ];
 
-     public function schedule()
+     public function doctor()
     {
-        return $this->belongsTo(Schedule::class);
+        return $this->belongsTo(Doctor::class, 'doctor_id');
     }
 }

@@ -35,7 +35,7 @@ class DoctorsController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(doctors $doctors)
+    public function show(doctor $doctors)
     {
         $doctor = Doctor::findOrFail($id);
         return view ('pages.doctors.show', compact('doctor'));
@@ -44,7 +44,7 @@ class DoctorsController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(doctors $doctors)
+    public function edit(doctor $doctors)
     {
         $doctor = Doctor::findOrFail($id);
         return view('pages.doctors.edit', compact('doctor'));
@@ -53,7 +53,7 @@ class DoctorsController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, doctors $doctors)
+    public function update(Request $request, doctor $doctors)
     {
         //
     }
@@ -61,7 +61,7 @@ class DoctorsController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(doctors $doctors)
+    public function destroy(doctor $doctors)
     {
         $doctor = Doctor::findOrFail($id);
         $doctor->delete();

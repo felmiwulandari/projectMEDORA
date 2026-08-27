@@ -20,6 +20,7 @@
         <table class="table table-striped table-hover datatable">
             <thead>
                 <tr>
+                    <th>Dokter</th>
                     <th>Tanggal</th>
                     <th>Jam Mulai</th>
                     <th>Jam Selesai</th>
@@ -31,6 +32,7 @@
             <tbody>
                 @foreach ($schedules as $schedule)
                 <tr>
+                    <td>{{ $schedule->doctor->name ?? 'Tidak ada' }}</td>
                     <td>{{ $schedule->tanggal }}</td>
                     <td>{{ $schedule->jam_mulai }}</td>
                     <td>{{ $schedule->jam_selesai }}</td>

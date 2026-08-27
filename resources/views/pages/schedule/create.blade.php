@@ -11,7 +11,7 @@
     <div class="row">
         <div class="col-md-6">
             <div class="card">
-                <form action="{{ route('pages.schedule.store') }}" method="POST">
+                <form action="{{ route('pages.Schedule.store') }}" method="POST">
                     @csrf
 
                     <div class="card-header">
@@ -20,9 +20,27 @@
 
                     <div class="card-body">
 
+                        {{-- DOCTOR ID --}}
+                        <div class="form-group mb-3">
+                            <label for="doctor_id" class="form-label">Dokter <span class="text-danger">*</span></label>
+                            <select name="doctor_id" id="doctor_id" class="form-control @error('doctor_id') is-invalid @enderror" required>
+                                <option value="">Pilih Dokter</option>
+                                
+                                @foreach($doctors as $doctor)
+                                    <option value="{{ $doctor->id }}" {{ old('doctor_id') == $doctor->id ? 'selected' : '' }}>
+                                        {{ $doctor->name }}
+                                    </option>
+                                @endforeach
+                            </select>
+
+                            @error('doctor_id')
+                                <div class="invalid-feedback d-block">{{ $message }}</div>
+                            @enderror
+                        </div>
+
                         <div class="form-group mb-3">
                             <label for="tanggal" class="form-label">Tanggal</label>
-                            <input type="text" name="tanggal" id="tanggal" value="{{ old('tanggal') }}" class="form-control @error('tanggal') is-invalid @enderror">
+                            <input type="date" name="tanggal" id="tanggal" value="{{ old('tanggal') }}" class="form-control @error('tanggal') is-invalid @enderror">
 
                             @error('tanggal')
                                 <div class="invalid-feedback d-block">
@@ -34,7 +52,7 @@
 
                         <div class="form-group mb-3">
                             <label for="jam_mulai" class="form-label">Jam Mulai</label>
-                            <input type="text" name="jam_mulai" id="jam_mulai" value="{{ old('jam_mulai') }}" class="form-control @error('jam_mulai') is-invalid @enderror">
+                            <input type="time" name="jam_mulai" id="jam_mulai" value="{{ old('jam_mulai') }}" class="form-control @error('jam_mulai') is-invalid @enderror">
 
                             @error('jam_mulai')
                                 <div class="invalid-feedback d-block">
@@ -46,7 +64,7 @@
 
                         <div class="form-group mb-3">
                             <label for="jam_selesai" class="form-label">Jam Selesai</label>
-                            <input type="text" name="jam_selesai" id="jam_selesai" value="{{ old('jam_selesai') }}" class="form-control @error('jam_selesai') is-invalid @enderror">
+                            <input type="time" name="jam_selesai" id="jam_selesai" value="{{ old('jam_selesai') }}" class="form-control @error('jam_selesai') is-invalid @enderror">
 
                             @error('jam_selesai')
                                 <div class="invalid-feedback d-block">
@@ -58,7 +76,7 @@
 
                         <div class="form-group mb-3">
                             <label for="kuota" class="form-label">Kuota</label>
-                            <input type="text" name="kuota" id="kuota" value="{{ old('kuota') }}" class="form-control @error('kuota') is-invalid @enderror">
+                            <input type="number" name="kuota" id="kuota" value="{{ old('kuota') }}" class="form-control @error('kuota') is-invalid @enderror">
 
                             @error('kuota')
                                 <div class="invalid-feedback d-block">
@@ -67,17 +85,17 @@
                             @enderror
                         </div>
 
-                        <div class="form-group mb-3">
-                            <label for="status" class="form-label">Status</label>
-                            <input type="text" name="status" id="status" value="{{ old('status') }}" class="form-control @error('status') is-invalid @enderror">
-
+                          <div class="form-group mb-3">
+                            <label for="status" class="form-label">Status <span class="text-danger">*</span></label>
+                            <select name="status" id="status" class="form-control @error('status') is-invalid @enderror" required>
+                                <option value="aktif" {{ old('status') == 'aktif' ? 'selected' : '' }}>Aktif</option>
+                                <option value="tidak aktif" {{ old('status') == 'tidak aktif' ? 'selected' : '' }}>Tidak Aktif</option>
+                            </select>
+                            
                             @error('status')
-                                <div class="invalid-feedback d-block">
-                                    <span>{{ $message }}</span>
-                                </div>
+                                <div class="invalid-feedback d-block">{{ $message }}</div>
                             @enderror
                         </div>
-
                     </div>
 
                     <div class="card-footer">
@@ -85,7 +103,7 @@
                             <span class="fa fa-save"></span> Save
                         </button>
 
-                        <a href="{{ route('pages.schedule.index') }}" class="btn btn-secondary">
+                        <a href="{{ route('pages.Schedule.index') }}" class="btn btn-secondary">
                             <span class="fa fa-times-circle"></span> Cancel
                         </a>
                     </div>
