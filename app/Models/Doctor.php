@@ -11,13 +11,13 @@ class Doctor extends Model
     protected $table = "doctors";
     protected $fillable = [
         "name",
-        "spesialist_id",
+        "specialist_id",
         "status",
         "no_hp",
     ];
 
-    public function guests()
+    public function specialist()
     {
-        return $this->hasMany(Specialist::class, "specialist_id");
+        return $this->belongsTo(Specialist::class, "specialist_id");
     }
 }
