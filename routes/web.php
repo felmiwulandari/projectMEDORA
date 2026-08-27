@@ -1,14 +1,11 @@
 <?php
 
-use App\Http\Controllers\PatientController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
     return view ('welcome');
 });
-
-Route::resource('patients', PatientController::class);
 
 Auth::routes([
     'register' => false,
@@ -22,7 +19,9 @@ Route::group([
     'as' => 'admin',
     'middleware' => 'auth',
 ],  function () {
-
+    
     Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
-});
 
+     // Route for Doctor page
+    Route::resource('/doctor', App\Http\Controllers\DoctorsController::class);
+});

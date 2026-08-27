@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Models\Doctor;
-use App\Models\doctors;
 use Illuminate\Http\Request;
 
 class DoctorsController extends Controller
@@ -64,9 +63,10 @@ class DoctorsController extends Controller
      */
     public function destroy(doctors $doctors)
     {
-        $doctor = Doctor::findOrFail($id);
+        $doctor = Doctor::findOrFail(decrypt($id));
         $doctor->delete();
-
-        return redirect()->route('doctors.index')->with('success', 'Delete successfully for ID: ' . $id);
+ 
+        return redirect()->route('admin.doctor.index')
+        ->with('success', 'Delete successfully for ID:' . (decrypt($id)));
     }
 }
