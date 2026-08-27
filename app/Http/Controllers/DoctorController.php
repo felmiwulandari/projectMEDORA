@@ -63,9 +63,10 @@ class DoctorsController extends Controller
      */
     public function destroy(doctor $doctors)
     {
-        $doctor = Doctor::findOrFail($id);
+        $doctor = Doctor::findOrFail(decrypt($id));
         $doctor->delete();
-
-        return redirect()->route('doctors.index')->with('success', 'Delete successfully for ID: ' . $id);
+ 
+        return redirect()->route('admin.doctor.index')
+        ->with('success', 'Delete successfully for ID:' . (decrypt($id)));
     }
 }
