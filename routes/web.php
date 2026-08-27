@@ -16,9 +16,10 @@ Auth::routes([
 
 Route::group([
     'prefix' => 'admin',
-    'as' => 'admin',
+    'as' => 'admin.',
     'middleware' => 'auth',
 ],  function () {
-      
-    Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+
+    // Route for Admin page
+    Route::resource('/admin', App\Http\Controllers\AdminController::class);
 });
