@@ -5,7 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class specialist extends Model
+class Specialist extends Model
 {
     use HasFactory;
     protected $table = "specialists";
@@ -13,4 +13,9 @@ class specialist extends Model
         "name",
         "status"
     ];
+
+     public function doctors()
+    {
+        return $this->hasMany(Doctor::class, "specialist_id");
+    }
 }
