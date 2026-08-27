@@ -16,22 +16,9 @@ Auth::routes([
 
 Route::group([
     'prefix' => 'admin',
-<<<<<<< HEAD
-    'as' => 'admin.',
-    'middleware' => 'auth',
-],  function () {
-      
-    // Route for Dashboard page
-    Route::get('/', [App\Http\Controllers\HomeController::class, 'index']);
-    Route::get('/dashboard', [App\Http\Controllers\HomeController::class, 'index'])->name('dashboard');
-
-    // Route for Specialist page
-    Route::resource('/specialist', App\Http\Controllers\SpecialistController::class);
-=======
     'as' => 'admin',
     'middleware' => 'auth',
 ],  function () {
     
     Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
->>>>>>> origin/develop
 });
