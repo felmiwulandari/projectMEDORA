@@ -32,8 +32,10 @@
                 @foreach ($schedules as $schedule)
                 <tr>
                     <td>{{ $schedule->tanggal }}</td>
-                    <td>{{ $schedule->name }}</td>
-                    <td>{{ $schedule->position }}</td>
+                    <td>{{ $schedule->jam_mulai }}</td>
+                    <td>{{ $schedule->jam_selesai }}</td>
+                    <td>{{ $schedule->kuota }}</td>
+                    <td>{{ $schedule->status }}</td>
 
                     <td>
                         <a href="{{ route('pages.Schedule.show', encrypt($schedule->id)) }}" class="btn btn-link text-secondary p-0 mx-2">
