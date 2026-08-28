@@ -20,7 +20,7 @@ class DoctorFactory extends Factory
     {
         return [
             'name' => fake()->name(),
-            'spesialist_id' => Specialist::factory(),
+            'specialist_id' => Specialist::factory(),
             'status' => fake()->randomElement(['aktif', 'tidak aktif']),
             'no_hp' => fake()->phoneNumber(),
         ];
