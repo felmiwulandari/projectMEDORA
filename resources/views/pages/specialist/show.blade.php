@@ -17,6 +17,17 @@
                 </tr>
 
                 <tr>
+                    <th width="200px">Status</th>
+                    <td>
+                        @if($specialists->status == 'Aktif')
+                            <span class="badge badge-success">Aktif</span>
+                        @else
+                            <span class="badge badge-danger">Tidak Aktif</span>
+                        @endif
+                    </td>
+                </tr>
+
+                <tr>
                     <th width="200px">Terdaftar pada</th>
                     <td>{{ \Carbon\Carbon::parse($specialists->created_at)->isoFormat('DD MMMM Y HH:mm:ss') }}</td>
                 </tr>
@@ -30,8 +41,8 @@
                 <a href="{{ route('admin.specialist.index') }}" class="btn btn-primary mr-2">
                     Kembali
                 </a>
-                <a href="{{ route('admin.specialist.edit', $specialists->id) }}" class="btn btn-secondary mr-2">Edit</a>
-                <a href="javascript:void()" onclick="handleDestroy('{{ route('admin.specialist.destroy', encrypt($employee->id)) }}')"
+                <a href="{{ route('admin.specialist.edit', encrypt($specialists->id)) }}" class="btn btn-secondary mr-2">Edit</a>
+                <a href="javascript:void()" onclick="handleDestroy('{{ route('admin.specialist.destroy', encrypt($specialists->id)) }}')"
                     class="btn btn-danger mr-2">Hapus
                 </a>
             </div>

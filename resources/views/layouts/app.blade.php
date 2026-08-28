@@ -19,6 +19,55 @@
 
     <!-- Custom styles for this template-->
     <link href="{{ asset('css/sb-admin-2.min.css') }}" rel="stylesheet">
+   <style>
+        .sidebar .nav-item .nav-link {
+            padding-top: 0.65rem;
+            padding-bottom: 0.65rem;
+            font-size: 1.15rem;
+        }
+
+        .sidebar .nav-item .nav-link i {
+            width: 35px;
+            text-align: center;
+            font-size: 1.4rem;
+        }
+
+        .sidebar .nav-item:first-of-type {
+            margin-bottom: 1.2rem;
+        }
+
+        .sidebar .nav-item:last-child {
+            margin-top: 1.5rem;
+        }
+
+        /* Sidebar tetap saat halaman di-scroll */
+        #accordionSidebar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 100vh;
+            z-index: 1030;
+        }
+
+        /* Content tidak menutupi sidebar */
+        #content-wrapper {
+            margin-left: 224px;
+        }
+
+        /* Navbar tetap saat halaman di-scroll */
+        #content-wrapper .navbar {
+            position: fixed;
+            top: 0;
+            right: 0;
+            left: 14rem;
+            z-index: 1020;
+        }
+
+        /* Supaya content tidak tertutup navbar */
+        #content {
+            padding-top: 70px;
+        }
+    </style>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert2/11.26.25/sweetalert2.all.min.js"></script>
 

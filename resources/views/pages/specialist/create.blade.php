@@ -29,15 +29,17 @@
                             @enderror
                         </div>
 
-
-                        <div class="form-group mb-3">
-                            <label for="status" class="form-label">Status</label>
-                            <input type="text" name="status" id="status" value="{{ old('status') }}" class="form-control @error('status') is-invalid @enderror">
-
-                             @error('status')
+                        <div class="form-group mb-2">
+                            <label for="status" class="form-label">Status <span class="text-danger">*</span></label>
+                            <select name="status" id="status" class="form-control @error('status') is-invalid @enderror">
+                                <option value="">Pilih Status</option>
+                                <option value="Aktif" {{ old('status') == 'Aktif' ? 'selected' : '' }}>Aktif</option>
+                                <option value="Tidak Aktif" {{ old('status') == 'Tidak Aktif' ? 'selected' : '' }}>Tidak Aktif</option>
+                            </select>
+                            @error('status')
                                 <span class="invalid-feedback d-block" role="alert">
-                                    {{$message}}
-                                </span>   
+                                    {{ $message }}
+                                </span>
                             @enderror
                         </div>
                     
