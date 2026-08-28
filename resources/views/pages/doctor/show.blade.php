@@ -1,12 +1,11 @@
 @extends('layouts.app')
 
-@section('title', 'Doctor detail!')
+@section('title', 'Doctor Detail!')
 
 @section('content')
     <div class="container py-4">
-        <h1 class="page-title mb-3">Doctor detail!</h1>
+        <h1 class="page-title mb-3">Doctor Detail!</h1>
         
-
         <table class="table table-striped">
             <tr>
                 <th width="200px">ID</th>
@@ -17,73 +16,78 @@
                 <td>{{ $doctor->name }}</td>
             </tr>
             <tr>
-                <th width="200px">Email</th>
-                <td>{{ $doctor->specialist_id }}</td>
+                <th width="200px">Specialist</th>
+                <td>{{ $doctor->specialist->name ?? '-' }}</td>
             </tr>
             <tr>
-                <th width="200px">Email</th>
-                <td>{{ $doctor->status }}</td>
+                <th width="200px">Status</th>
+                <td>
+                    @if($doctor->status == 'Aktif')
+                        <span class="badge badge-success">Aktif</span>
+                    @else
+                        <span class="badge badge-danger">Tidak Aktif</span>
+                    @endif
+                </td>
             </tr>
             <tr>
-                <th width="200px">Email</th>
+                <th width="200px">No HP</th>
                 <td>{{ $doctor->no_hp }}</td>
             </tr>
             <tr>
                 <th width="200px">Terdaftar Pada</th>
-                <td>{{ \Carbon\Carbon::parse ($user->created_at)->isoFormat('DD MM Y HH:mm:ss') }}</td>
+                <td>{{ \Carbon\Carbon::parse($doctor->created_at)->isoFormat('DD MMM Y HH:mm:ss') }}</td>
             </tr>
             <tr>
                 <th width="200px">Diperbarui Pada</th>
-                <td>{{ \Carbon\Carbon::parse ($user->updated_at)->isoFormat('DD MM Y HH:mm:ss') }}</td>
+                <td>{{ \Carbon\Carbon::parse($doctor->updated_at)->isoFormat('DD MMM Y HH:mm:ss') }}</td>
             </tr>
         </table>
+        
         <div class="d-flex align-items-center gap-2">
             <a href="{{ route('admin.doctor.index') }}" class="btn btn-primary">Kembali</a>
-            <a href="{{ route('admin.doctor.edit', encrypt($user->id)) }}" class="btn btn-link p-0 mx-2">
-                <span class="fa fa-edit"></span>
+            <a href="{{ route('admin.doctor.edit', encrypt($doctor->id)) }}" class="btn btn-warning">
+                <span class="fa fa-edit"></span> Edit
             </a>
-            <a href="javascript:void()" onclick="handleDestroy('{{ route('admin.doctor.destroy', encrypt($user->id)) }}')" class="btn btn-link text-danger p-0 mx-2">
-                <span class="fa fa-trash"></span>
+            <a href="javascript:void(0)" onclick="handleDestroy('{{ route('admin.doctor.destroy', encrypt($doctor->id)) }}')" class="btn btn-danger">
+                <span class="fa fa-trash"></span> Hapus
             </a>
         </div>
     </div>
+    
+    <form action="" id="form-destroy" method="POST">
+        @csrf
+        @method('DELETE')
+    </form>
 @endsection
 
-@push('styles')
-<link rel="stylesheet" href="{{ asset('vendor/datatables/dataTables.bootstrap4.min.css') }}">
-@endpush
-
-@push('scripts') 
-<script type="text/javascript" src="{{ asset('vendor/datatables/jquery.dataTables.min.js') }}"></script>
-<script type="text/javascript" src="{{ asset('vendor/datatables/dataTables.bootstrap4.min.js') }}"></script>
-<script type="text/javascript">
-    $('.datatable').dataTable();
-    
-function handleDestroy(url) {
-    Swal.fire({
-        title: "Apakah Anda yakin?",
-        text: "Kamu tidak bisa mengembalikan data yang telah di hapus!",
-        icon: "warning",
-        showCancelButton: true,
-        confirmButtonText: "Ya Hapus",
-        cancelButtonText: "Batal",
-    }).then((result) => {
-        if (result.isConfirmed) {
-            $('#form-destroy').attr('action', url);
-            $('#form-destroy').submit(); 
-        }
-    });
-}
+@push('scripts')
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script>
+    function handleDestroy(url) {
+        Swal.fire({
+            title: "Apakah Anda yakin?",
+            text: "Kamu tidak bisa mengembalikan data yang telah di hapus!",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonText: "Ya Hapus",
+            cancelButtonText: "Batal",
+        }).then((result) => {
+            if (result.isConfirmed) {
+                $('#form-destroy').attr('action', url);
+                $('#form-destroy').submit(); 
+            }
+        });
+    }
 </script>
 @if (Session::has('success'))
-         <script>
-            Swal.fire({
-                        title: "Berhasil!",
-                        text: "{{ Session::get('success') }}",
-                        icon: "success",
-                        timer: "2000",
-                        showConfirmButton: false
-                    });
-         </script>
-     @endif
+<script>
+    Swal.fire({
+        title: "Berhasil!",
+        text: "{{ Session::get('success') }}",
+        icon: "success",
+        timer: "2000",
+        showConfirmButton: false
+    });
+</script>
+@endif
 @endpush

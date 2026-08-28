@@ -3,9 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Models\Doctor;
+use App\Models\Specialist;
 use Illuminate\Http\Request;
 
-class DoctorsController extends Controller
+class DoctorController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -13,7 +14,7 @@ class DoctorsController extends Controller
     public function index()
     {
         $doctors = Doctor::paginate(10);
-        return view('pages.doctors.index', compact('doctors'));
+        return view('pages.doctor.index', compact('doctors'));
     }
 
     /**
@@ -21,7 +22,8 @@ class DoctorsController extends Controller
      */
     public function create()
     {
-        return view('pages.doctors.create');
+        $specialists = Specialist::all();
+        return view('pages.doctor.create', compact('specialists'));
     }
 
     /**
@@ -29,44 +31,66 @@ class DoctorsController extends Controller
      */
     public function store(Request $request)
     {
-        
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'specialist_id' => 'required|exists:specialists,id',
+            'status' => 'required|in:Aktif,Tidak Aktif',
+            'no_hp' => 'required|string|max:15',
+        ]);
+
+        Doctor::create($request->all());
+
+        return redirect()->route('admin.doctor.index')
+            ->with('success', 'Doctor created successfully!');
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(doctors $doctors)
+    public function show(string $id)
     {
-        $doctor = Doctor::findOrFail($id);
-        return view ('pages.doctors.show', compact('doctor'));
+        $doctor = Doctor::findOrFail(decrypt($id));
+        return view('pages.doctor.show', compact('doctor'));
     }
 
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(doctors $doctors)
+    public function edit(string $id)
     {
-        $doctor = Doctor::findOrFail($id);
-        return view('pages.doctors.edit', compact('doctor'));
+        $doctor = Doctor::findOrFail(decrypt($id));
+        $specialists = Specialist::all();
+        return view('pages.doctor.edit', compact('doctor', 'specialists')); // FIX: tanpa 's'
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, doctors $doctors)
+    public function update(Request $request, string $id)
     {
-        //
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'specialist_id' => 'required|exists:specialists,id',
+            'status' => 'required|in:Aktif,Tidak Aktif',
+            'no_hp' => 'required|string|max:15',
+        ]);
+
+        $doctor = Doctor::findOrFail($id);
+        $doctor->update($request->all());
+
+        return redirect()->route('admin.doctor.index')
+            ->with('success', 'Doctor updated successfully!');
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(doctors $doctors)
+    public function destroy(string $id)
     {
         $doctor = Doctor::findOrFail(decrypt($id));
         $doctor->delete();
- 
+
         return redirect()->route('admin.doctor.index')
-        ->with('success', 'Delete successfully for ID:' . (decrypt($id)));
+            ->with('success', 'Delete successfully for ID: ' . decrypt($id));
     }
 }

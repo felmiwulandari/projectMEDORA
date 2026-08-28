@@ -21,4 +21,10 @@ Route::group([
 ],  function () {
       
     Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+
+    Route::resource('/admin', App\Http\Controllers\AdminController::class);
+
+    Route::resource('/specialist', App\Http\Controllers\DoctorController::class);
+
+    Route::resource('/doctor', App\Http\Controllers\DoctorController::class);
 });

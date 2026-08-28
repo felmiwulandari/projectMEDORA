@@ -5,7 +5,7 @@
                 <div class="sidebar-brand-icon rotate-n-15">
                     <i class="fas fa-laugh-wink"></i>
                 </div>
-                <div class="sidebar-brand-text mx-3">GuestBook<sup>2</sup></div>
+                <div class="sidebar-brand-text mx-3">MEDORA</div>
             </a>
 
             <!-- Divider -->
@@ -18,18 +18,39 @@
                     <span>Dashboard</span></a>
             </li>
 
-            <!-- Nav Item - Guest List -->
+            <!-- Nav Item - Specialist -->
             <li class="nav-item active">
-                <a class="nav-link" href="{{ route('admin.guest.index') }}">
+                <a class="nav-link" href="{{ route('admin.specialist.index') }}">
                     <i class="fas fa-fw fa-users"></i>
-                    <span>Guest List</span></a>
+                    <span>Specialist</span></a>
             </li>
 
-            <!-- Nav Item - Employee -->
+            <!-- Nav Item - Doctor -->
             <li class="nav-item active">
-                <a class="nav-link" href="{{ route('admin.employee.index') }}">
+                <a class="nav-link" href="{{ route('admin.doctor.index') }}">
                     <i class="fas fa-fw fa-check"></i>
-                    <span>Employee</span></a>
+                    <span>Doctor</span></a>
+            </li>
+
+            <!-- Nav Item - Schedule -->
+            <li class="nav-item active">
+                <a class="nav-link" href="#">
+                    <i class="fas fa-fw fa-check"></i>
+                    <span>Schedule</span></a>
+            </li>
+
+            <!-- Nav Item - Patient -->
+            <li class="nav-item active">
+                <a class="nav-link" href="#">
+                    <i class="fas fa-fw fa-check"></i>
+                    <span>Patient</span></a>
+            </li>
+
+            <!-- Nav Item - Registration -->
+            <li class="nav-item active">
+                <a class="nav-link" href="#">
+                    <i class="fas fa-fw fa-check"></i>
+                    <span>Registration</span></a>
             </li>
 
             <!-- Nav Item - Admin -->
