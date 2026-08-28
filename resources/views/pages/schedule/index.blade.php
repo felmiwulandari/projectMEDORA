@@ -25,7 +25,8 @@
                     <th>Jam Mulai</th>
                     <th>Jam Selesai</th>
                     <th>Kuota</th>
-                    <th>status</th>
+                    <th>Status</th>
+                    <th>Aksi</th>
                 </tr>
             </thead>
 
@@ -38,6 +39,7 @@
                     <td>{{ $schedule->jam_selesai }}</td>
                     <td>{{ $schedule->kuota }}</td>
                     <td>{{ $schedule->status }}</td>
+                    <td>{{ $schedule->aksi }}</td>
 
                     <td>
                         <a href="{{ route('pages.Schedule.show', encrypt($schedule->id)) }}" class="btn btn-link text-secondary p-0 mx-2">
