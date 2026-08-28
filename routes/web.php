@@ -19,7 +19,10 @@ Route::group([
     'as' => 'admin.',
     'middleware' => 'auth',
 ],  function () {
-      
+
+    // Route for Admin page
+    Route::resource('/admin', App\Http\Controllers\AdminController::class);
+
     // Route for Dashboard page
     Route::get('/', [App\Http\Controllers\HomeController::class, 'index']);
     Route::get('/dashboard', [App\Http\Controllers\HomeController::class, 'index'])->name('dashboard');
