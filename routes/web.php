@@ -19,9 +19,18 @@ Route::group([
     'as' => 'admin',
     'middleware' => 'auth',
 ],  function () {
-    
+
     Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+
+     // Route for Dashboard page
+    Route::get('/dashboard', [App\Http\Controllers\HomeController::class, 'index'])->name('dashboard');
 
      // Route for Doctor page
     Route::resource('/doctor', App\Http\Controllers\DoctorsController::class);
+
+    // Route for Patient page
+    Route::resource('/patient', App\Http\Controllers\PatientController::class);
+
+    // Route for Spesialist page
+    Route::resource('/spesialist', App\Http\Controllers\SpesialistController::class);
 });
