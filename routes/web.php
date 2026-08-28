@@ -26,9 +26,11 @@ Route::group([
 
     Route::resource('/admin', App\Http\Controllers\AdminController::class);
 
-    Route::resource('/specialist', App\Http\Controllers\DoctorController::class);
+    Route::resource('/specialist', App\Http\Controllers\SpecialistController::class);
 
     Route::resource('/doctor', App\Http\Controllers\DoctorController::class);
+
+    Route::resource('/schedule', App\Http\Controllers\ScheduleController::class);
 });
 
 

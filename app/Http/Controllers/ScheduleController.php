@@ -13,8 +13,8 @@ class ScheduleController extends Controller
      */
     public function index()
     {
-        $schedule = Schedule::with('doctor')->get(); // 
-        return view('pages.schedule.index', compact('schedule'));
+        $schedules = Schedule::paginate(10);
+        return view('pages.schedule.index', compact('schedules'));
     }
 
     /**
