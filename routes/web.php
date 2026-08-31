@@ -26,6 +26,10 @@ Route::group([
 
     Route::resource('/admin', App\Http\Controllers\AdminController::class);
 
+    // Route for Profile page
+    Route::get('/profile', [App\Http\Controllers\ProfileController::class, 'index'])->name('profile');
+    Route::post('/profile', [App\Http\Controllers\ProfileController::class, 'save'])->name('profile.save');
+
     Route::resource('/specialist', App\Http\Controllers\SpecialistController::class);
 
     Route::resource('/doctor', App\Http\Controllers\DoctorController::class);

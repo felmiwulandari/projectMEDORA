@@ -34,7 +34,7 @@
 
             <!-- Nav Item - Schedule -->
             <li class="nav-item active">
-                <a class="nav-link" href="#">
+                <a class="nav-link" href="{{ route('admin.schedule.index') }}">
                     <i class="fas fa-fw fa-check"></i>
                     <span>Schedule</span></a>
             </li>
