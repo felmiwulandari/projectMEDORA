@@ -37,34 +37,33 @@
             </thead>
 
             <tbody>
-                @foreach ($registrations as $key => $registration)
+               @foreach ($resgistrations as $registration)
                 <tr>
-                    <td>{{ $key + 1 }}</td>
                     <td>{{ $registration->patient->name ?? 'Tidak ditemukan' }}</td>
-                    <td>{{ $registration->doctor->spesialis ?? '-' }}</td>
-                    <td>{{ $registration->doctor->name ?? '-' }}</td>
+                    <td>{{ $registration->schedule->specialist->name ?? '-' }}</td>  {{-- LEWAT SCHEDULE --}}
+                    <td>{{ $registration->schedule->doctor->name ?? '-' }}</td>       {{-- LEWAT SCHEDULE --}}
                     <td>{{ $registration->jam_mulai }}</td>
                     <td>{{ $registration->jam_selesai }}</td>
                     <td>{{ \Carbon\Carbon::parse($registration->tanggal_daftar)->format('d-m-Y') }}</td>
                     <td>
-                        @if($registration->status == 'menunggu')
-                            <span class="badge badge-warning">🟡 Menunggu</span>
-                        @elseif($registration->status == 'diterima')
-                            <span class="badge badge-success">🟢 Diterima</span>
-                        @else
-                            <span class="badge badge-danger">🔴 Ditolak</span>
-                        @endif
-                    </td>
+                            @if($registration->status == 'menunggu')
+                                <span class="badge badge-warning">🟡 Menunggu</span>
+                            @elseif($registration->status == 'diterima')
+                                <span class="badge badge-success">🟢 Diterima</span>
+                            @else
+                                <span class="badge badge-danger">🔴 Ditolak</span>
+                            @endif
+                        </td>
                     <td>{{ Str::limit($registration->keluhan, 20) }}</td>
                     <td>
                         {{-- DETAIL --}}
-                        <a href="{{ route('pages.Registration.show', encrypt($registration->id)) }}" class="btn btn-link text-secondary p-0 mx-2">
+                        <a href="{{ route('admin.registration.show', encrypt($registration->id)) }}" class="btn btn-link text-secondary p-0 mx-2">
                             <span class="fa fa-search"></span>
                         </a>
 
                         {{-- TOMBOL TERIMA (Centang) - Hanya tampil jika status menunggu --}}
                         @if($registration->status == 'menunggu')
-                        <form action="{{ route('pages.Registration.approve', encrypt($registration->id)) }}" method="POST" class="d-inline">
+                        <form action="{{ route('admin.registration.approve', encrypt($registration->id)) }}" method="POST" class="d-inline">
                             @csrf
                             <button type="submit" class="btn btn-link text-success p-0 mx-2" onclick="return confirm('Terima pendaftaran ini?')">
                                 <span class="fa fa-check-circle"></span>
@@ -74,7 +73,7 @@
 
                         {{-- TOMBOL TOLAK (Silang) - Hanya tampil jika status menunggu --}}
                         @if($registration->status == 'menunggu')
-                        <form action="{{ route('pages.Registration.reject', encrypt($registration->id)) }}" method="POST" class="d-inline">
+                        <form action="{{ route('admin.registration.reject', encrypt($registration->id)) }}" method="POST" class="d-inline">
                             @csrf
                             <button type="submit" class="btn btn-link text-danger p-0 mx-2" onclick="return confirm('Tolak pendaftaran ini?')">
                                 <span class="fa fa-times-circle"></span>

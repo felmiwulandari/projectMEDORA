@@ -21,7 +21,7 @@
             </tr>
             <tr>
                 <th width="200px">Spesialis</th>
-                <td>{{ $registration->doctor->spesialis ?? '-' }}</td>
+                <td>{{ $registration->doctor->specialist ?? '-' }}</td>
             </tr>
             <tr>
                 <th width="200px">Tanggal Daftar</th>
@@ -45,9 +45,9 @@
                     @if($registration->status == 'menunggu')
                         <span class="badge badge-warning">🟡 Menunggu</span>
                     @elseif($registration->status == 'diterima')
-                        <span class="badge badge-success">🟢 Diterima</span>
+                        <span class="badge badge-success">🟢 Di konfirmasi</span>
                     @else
-                        <span class="badge badge-danger">🔴 Ditolak</span>
+                        <span class="badge badge-danger">🔴 Di tolak</span>
                     @endif
                 </td>
             </tr>
@@ -62,7 +62,7 @@
         </table>
 
         <div class="d-flex align-items-center gap-2">
-            <a href="{{ route('pages.Registration.index') }}" class="btn btn-primary">Kembali</a>
+            <a href="{{ route('admin.registration.index') }}" class="btn btn-primary">Kembali</a>
 
         </div>
     </div>

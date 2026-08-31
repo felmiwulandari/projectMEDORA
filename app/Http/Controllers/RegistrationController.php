@@ -13,9 +13,13 @@ class RegistrationController extends Controller
      */
     public function index()
     {
-        $registrations = Registration::with(['patient', 'specialist', 'schedule'])
-            ->orderBy('created_at', 'desc')
-            ->paginate(10);
+        $registrations = Registration::with([
+            'patient',
+            'specialist',
+            'schedule'
+        ])
+        ->orderBy('created_at', 'desc')
+        ->paginate(10);
 
         return view('pages.registration.index', compact('registrations'));
     }
@@ -41,8 +45,11 @@ class RegistrationController extends Controller
      */
     public function show(string $id)
     {
-        $registration = Registration::with(['patient', 'specialist', 'schedule'])
-             ->findOrFail(decrypt($id));
+        $registration = Registration::with([
+            'patient',
+            'specialist',
+            'schedule'
+        ])->findOrFail(decrypt($id));
 
         return view('pages.registration.show', compact('registration'));
     }
@@ -71,51 +78,59 @@ class RegistrationController extends Controller
         //
     }
 
-    
-    //  TOMBOL CENTANG (TERIMA/SETUJU PASIEN)
-    public function approve($id)
+
+    // TOMBOL CENTANG (KONFIRMASI PASIEN)
+    public function approve(Request $request, string $id)
     {
         $registration = Registration::findOrFail(decrypt($id));
-        
-        // Cek apakah status masih 'menunggu'
-        if ($registration->status !== 'menunggu') {
+
+        // Cek apakah status masih Menunggu
+        if ($registration->status !== 'Menunggu') {
             return redirect()->back()
                 ->with('error', 'Data sudah diproses sebelumnya!');
         }
 
-        // Cek kuota schedule
+        // Ambil data jadwal
         $schedule = Schedule::findOrFail($registration->schedule_id);
+
+        // Cek apakah kuota masih tersedia
         if ($schedule->kuota <= 0) {
             return redirect()->back()
                 ->with('error', 'Kuota sudah penuh!');
         }
 
-        // Update status jadi 'diterima' dan kurangi kuota
-        $registration->update(['status' => 'diterima']);
+        // Ubah status menjadi Di konfirmasi
+        $registration->update([
+            'status' => 'Di konfirmasi'
+        ]);
+
+        // Kurangi kuota jadwal
         $schedule->decrement('kuota');
 
         return redirect()
-            ->route('pages.Registration.index')
-            ->with('success', '✅ Pendaftaran berhasil diterima!');
+            ->route('admin.registration.index')
+            ->with('success', 'Pendaftaran berhasil dikonfirmasi!');
     }
 
 
-    //  TOMBOL SILANG (TOLAK PASIEN)
-    public function reject($id)
+    // TOMBOL SILANG (TOLAK PASIEN)
+    public function reject(string $id)
     {
         $registration = Registration::findOrFail(decrypt($id));
-        
-        // Cek apakah status masih 'menunggu'
-        if ($registration->status !== 'menunggu') {
+
+        // Cek apakah status masih Menunggu
+        if ($registration->status !== 'Menunggu') {
             return redirect()->back()
                 ->with('error', 'Data sudah diproses sebelumnya!');
         }
 
-        // Update status jadi 'ditutup'
-        $registration->update(['status' => 'ditutup']);
+        // Ubah status menjadi Di tolak
+        $registration->update([
+            'status' => 'Di tolak'
+        ]);
 
         return redirect()
-            ->route('pages.Registration.index')
-            ->with('success', '❌ Mohon maaf,Pendaftaran ditolak kuota sudah habis!');
+            ->route('admin.registration.index')
+            ->with('success', 'Pendaftaran berhasil ditolak!');
     }
 }

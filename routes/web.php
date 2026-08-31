@@ -44,6 +44,13 @@ Route::group([
 
     // Route for registration page
     Route::resource('/registration', App\Http\Controllers\RegistrationController::class);
+
+    // Route untuk konfirmasi dan penolakan pendaftaran
+    Route::post('/registration/{id}/approve', [App\Http\Controllers\RegistrationController::class, 'approve'])
+        ->name('registration.approve');
+
+    Route::post('/registration/{id}/reject', [App\Http\Controllers\RegistrationController::class, 'reject'])
+        ->name('registration.reject');
 });
 
 
