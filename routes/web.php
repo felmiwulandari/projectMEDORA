@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\RegistrationController;
 use App\Http\Controllers\ScheduleController;
 use App\Models\Schedule;
 
@@ -47,4 +48,16 @@ Route::prefix('pages')->group(function () {
     Route::get('/schedule/{id}/edit', [ScheduleController::class, 'edit'])->name('pages.Schedule.edit');
     Route::put('/schedule/{id}', [ScheduleController::class, 'update'])->name('pages.Schedule.update');
     Route::delete('/schedule/{id}', [ScheduleController::class, 'destroy'])->name('pages.Schedule.destroy');
+});
+
+// ROUTE UNTUK REGISTRATION
+Route::prefix('pages')->group(function () {
+    Route::get('/registration', [RegistrationController::class, 'index'])->name('pages.Registration.index');
+    Route::get('/registration/{id}', [RegistrationController::class, 'show'])->name('pages.Registration.show');
+});
+
+// Route untuk approve & reject
+Route::prefix('pages')->group(function () {
+    Route::post('/registration/approve/{id}', [RegistrationController::class, 'approve'])->name('pages.Registration.approve');
+    Route::post('/registration/reject/{id}', [RegistrationController::class, 'reject'])->name('pages.Registration.reject');
 });
