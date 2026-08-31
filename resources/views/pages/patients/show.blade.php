@@ -6,7 +6,7 @@
 <div class="container-fluid">
     <div class="d-sm-flex align-items-center justify-content-between mb-4">
         <h1 class="h3 mb-0 text-gray-800">PATIENT DETAIL</h1>
-        <a href="{{ route('pages.patient.index') }}" class="btn btn-secondary btn-sm">
+        <a href="{{ route('patients.index') }}" class="btn btn-secondary btn-sm">
             <i class="fas fa-arrow-left"></i> Back
         </a>
     </div>
