@@ -4,7 +4,7 @@
 
 @section('content')
 <div class="d-sm-flex align-items-center justify-content-between mb-4 px-3 pt-3">
-    <h1 class="h3 mb-0 text-gray-800">Halaman Registration</h1>
+    <h1 class="h3 mb-0 text-gray-800">Registration Page</h1>
 </div>
 
 <div class="card">
@@ -35,11 +35,12 @@
                     <th>Aksi</th>
                 </tr>
             </thead>
+
             <tbody>
-                @foreach($registrations as $key => $registration)
+                @foreach ($registrations as $key => $registration)
                 <tr>
                     <td>{{ $key + 1 }}</td>
-                    <td>{{ $registration->patient->name ?? '-' }}</td>
+                    <td>{{ $registration->patient->name ?? 'Tidak ditemukan' }}</td>
                     <td>{{ $registration->doctor->spesialis ?? '-' }}</td>
                     <td>{{ $registration->doctor->name ?? '-' }}</td>
                     <td>{{ $registration->jam_mulai }}</td>
@@ -107,6 +108,22 @@
 $(document).ready(function () {
     $(".datatable").DataTable();
 });
+
+function handleDestroy(url) {
+    Swal.fire({
+        title: "Apakah Anda Yakin?",
+        text: "Kamu tidak bisa mengembalikan data yang telah dihapus!",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonText: "Ya Hapus",
+        cancelButtonText: "Batal",
+    }).then((result) => {
+        if (result.isConfirmed) {
+            $('#form-destroy').attr('action', url);
+            $('#form-destroy').submit();
+        }
+    });
+}
 </script>
 
 @if (Session::has('success'))

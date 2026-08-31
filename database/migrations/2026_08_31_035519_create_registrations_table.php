@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('registrations', function (Blueprint $table) {
             $table->id();
             $table->foreignId('patient_id')->constrained('patients')->onDelete('cascade');
-            $table->foreignId('doctor_id')->constrained('doctors')->onDelete('cascade');
+            $table->foreignId('specialist_id')->constrained('specialist')->onDelete('cascade');
             $table->foreignId('schedule_id')->constrained('schedules')->onDelete('cascade');
             $table->time('jam_mulai');
             $table->time('jam_selesai');

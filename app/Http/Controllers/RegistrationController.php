@@ -13,7 +13,7 @@ class RegistrationController extends Controller
      */
     public function index()
     {
-        $registrations = Registration::with(['patient', 'doctor', 'schedule'])
+        $registrations = Registration::with(['patient', 'specialist', 'schedule'])
             ->orderBy('created_at', 'desc')
             ->paginate(10);
 
@@ -41,7 +41,7 @@ class RegistrationController extends Controller
      */
     public function show(string $id)
     {
-        $registration = Registration::with(['patient', 'doctor', 'schedule'])
+        $registration = Registration::with(['patient', 'specialist', 'schedule'])
              ->findOrFail(decrypt($id));
 
         return view('pages.registration.show', compact('registration'));

@@ -8,7 +8,7 @@ class Registration extends Model
 {
     protected $fillable = [
         'patient_id',
-        'doctor_id',
+        'specialist_id',
         'schedule_id',
         'jam_mulai',
         'jam_selesai',
