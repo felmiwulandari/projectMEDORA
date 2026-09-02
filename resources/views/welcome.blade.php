@@ -3,10 +3,29 @@
 @section('content')
 
 <div class="container min-vh-100 d-flex align-items-center justify-content-center">
-    <form id="patientForm" class="w-100">
+    <form id="patientForm" class="w-100" action="{{ route('patient.store') }}" method="POST">
         @csrf
 
-        {{-- STEP 1 : FORM PASIEN --}}
+        @if(session('success'))
+            <div class="alert alert-success alert-dismissible fade show" role="alert">
+                {{ session('success') }}
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+        @endif
+
+        @if($errors->any())
+            <div class="alert alert-danger">
+                <ul class="mb-0">
+                    @foreach($errors->all() as $error)
+                        <li>{{ $error }}</li>
+                    @endforeach
+                </ul>
+            </div>
+        @endif
+
+        {{-- FORM PASIEN --}}
         <div class="row justify-content-center" id="step1">
             <div class="col-md-7 col-lg-6">
                 <div class="card shadow rounded">
@@ -16,20 +35,20 @@
                         {{-- NAMA --}}
                         <div class="form-group mb-2">
                             <label class="mb-1">NAMA</label>
-                            <input type="text" name="name" id="name" class="form-control" value="{{ old('name') }}">
+                            <input type="text" name="name" id="name" class="form-control" value="{{ old('name') }}" required>
                         </div>
 
                         {{-- NIK --}}
                         <div class="form-group mb-2">
                             <label class="mb-1">NIK</label>
-                            <input type="text" name="nik" id="nik" class="form-control" value="{{ old('nik') }}">
+                            <input type="text" name="nik" id="nik" class="form-control" value="{{ old('nik') }}" required>
                         </div>
 
                         {{-- TANGGAL LAHIR --}}
                         <div class="form-group row align-items-center mb-2">
                             <label class="col-5 mb-0">TANGGAL LAHIR</label>
                             <div class="col-7">
-                                <input type="date" name="tanggal_lahir" id="tanggal_lahir" class="form-control" value="{{ old('tanggal_lahir') }}">
+                                <input type="date" name="tanggal_lahir" id="tanggal_lahir" class="form-control" value="{{ old('tanggal_lahir') }}" required>
                             </div>
                         </div>
 
@@ -37,10 +56,10 @@
                         <div class="form-group row align-items-center mb-2">
                             <label class="col-5 mb-0">JENIS KELAMIN</label>
                             <div class="col-7">
-                                <select name="jenis_kelamin" id="jenis_kelamin" class="form-control">
+                                <select name="jenis_kelamin" id="jenis_kelamin" class="form-control" required>
                                     <option value="">PILIH JENIS KELAMIN</option>
-                                    <option value="Laki-laki">LAKI-LAKI</option>
-                                    <option value="Perempuan">PEREMPUAN</option>
+                                    <option value="Laki-laki" {{ old('jenis_kelamin') == 'Laki-laki' ? 'selected' : '' }}>LAKI-LAKI</option>
+                                    <option value="Perempuan" {{ old('jenis_kelamin') == 'Perempuan' ? 'selected' : '' }}>PEREMPUAN</option>
                                 </select>
                             </div>
                         </div>
@@ -49,14 +68,14 @@
                         <div class="form-group row align-items-center mb-2">
                             <label class="col-5 mb-0">NO HP</label>
                             <div class="col-7">
-                                <input type="text" name="no_hp" id="no_hp" class="form-control" value="{{ old('no_hp') }}">
+                                <input type="text" name="no_hp" id="no_hp" class="form-control" value="{{ old('no_hp') }}" required>
                             </div>
                         </div>
 
                         {{-- ALAMAT --}}
                         <div class="form-group mb-2">
                             <label class="mb-1">ALAMAT</label>
-                            <textarea name="alamat" id="alamat" class="form-control" rows="2">{{ old('alamat') }}</textarea>
+                            <textarea name="alamat" id="alamat" class="form-control" rows="2" required>{{ old('alamat') }}</textarea>
                         </div>
 
                         {{-- LANJUT --}}
@@ -68,7 +87,7 @@
             </div>
         </div>
 
-        {{-- STEP 2 : PENDAFTARAN --}}
+        {{-- PENDAFTARAN --}}
         <div class="row justify-content-center d-none" id="step2">
             <div class="col-md-7 col-lg-6">
                 <div class="card shadow rounded">
@@ -88,7 +107,6 @@
                             <label class="mb-1">SPESIALIS</label>
                             <select name="specialist_id" id="specialist_id" class="form-control">
                                 <option value="">PILIH SPESIALIS</option>
-
                                 @foreach($specialists as $specialist)
                                     <option value="{{ $specialist->id }}">
                                         {{ $specialist->name }}
@@ -119,8 +137,7 @@
                             <textarea name="keluhan" id="keluhan" class="form-control" rows="3"></textarea>
                         </div>
 
-                        {{-- DAFTAR --}}
-                        <button type="button" class="btn btn-primary btn-block">DAFTAR</button>
+                        <button type="submit" class="btn btn-primary btn-block">DAFTAR</button>
 
                     </div>
                 </div>
