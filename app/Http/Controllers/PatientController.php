@@ -3,12 +3,14 @@
 namespace App\Http\Controllers;
 
 use App\Models\Patient;
+use App\Models\Specialist;
+use App\Models\Doctor;
 use Illuminate\Http\Request;
 
 class PatientController extends Controller
 {
     /**
-     * Display a listing of the resource.
+     * Menampilkan daftar pasien untuk Admin (index.blade.php)
      */
     public function index()
     {
@@ -18,29 +20,34 @@ class PatientController extends Controller
     }
 
     /**
-     * Show the form for creating a new resource.
+     * Menampilkan form pendaftaran data diri pasien (welcome.blade.php)
      */
     public function create()
     {
-        return view('pages.patient.create');
+        // Mengambil data specialist dan doctor untuk kebutuhan dropdown di view jika diperlukan
+        $specialists = Specialist::all();
+        $doctors     = Doctor::all();
+
+        return view('welcome', compact('specialists', 'doctors'));
     }
 
     /**
-     * Store a newly created resource in storage.
+     * Menyimpan data pasien dari form pendaftaran
      */
     public function store(Request $request)
     {
         $request->validate([
-            'nama'          => 'required|string|max:128',
+            'name'          => 'required|string|max:128',
             'nik'           => 'required|string|max:128|unique:patients,nik',
-            'tanggal_lahir' => 'required|string|max:128',
+            'tanggal_lahir' => 'required|date',
             'jenis_kelamin' => 'required|string|max:128',
-            'alamat'        => 'required|string|max:128',
+            'alamat'        => 'required|string|max:255',
             'no_hp'         => 'required|string|max:24',
         ]);
 
-         Patient::create([
-            'nama'          => $request->nama,
+        // Simpan Data Pasien
+        $patient = Patient::create([
+            'name'          => $request->name,
             'nik'           => $request->nik,
             'tanggal_lahir' => $request->tanggal_lahir,
             'jenis_kelamin' => $request->jenis_kelamin,
@@ -48,38 +55,14 @@ class PatientController extends Controller
             'no_hp'         => $request->no_hp,
         ]);
 
-        return redirect()->back()->with('success', 'Data Patient berhasil disimpan!');
+        return redirect()->back()->with('success', 'Data Pasien berhasil disimpan!');
     }
 
     /**
-     * Display the specified resource.
+     * Menampilkan detail data pasien untuk Admin (show.blade.php)
      */
     public function show(Patient $patient)
     {
         return view('pages.patient.show', compact('patient'));
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Patient $patient)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, Patient $patient)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(Patient $patient)
-    {
-        //
     }
 }

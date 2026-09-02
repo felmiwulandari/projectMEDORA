@@ -4,7 +4,9 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
-    return view ('welcome');
+    $specialists = \App\Models\Specialist::where('status', 'aktif')->get();
+
+    return view('welcome', compact('specialists'));
 });
 
 Auth::routes([
@@ -29,7 +31,7 @@ Route::group([
     // Route::resource('/doctor', App\Http\Controllers\DoctorsController::class);
 
     // Route for Patient page
-    Route::resource('/patient', App\Http\Controllers\PatientController::class);
+    Route::resource('patient', PatientController::class)->only(['index', 'show']);
 
     // // Route for Spesialist page
     // Route::resource('/spesialist', App\Http\Controllers\SpesialistController::class);

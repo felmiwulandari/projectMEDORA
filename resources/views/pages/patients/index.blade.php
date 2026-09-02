@@ -23,7 +23,7 @@
                         <thead class="table-primary text-center">
                             <tr>
                                 <th>No</th>
-                                <th>Nama</th>
+                                <th>Name</th>
                                 <th>NIK</th>
                                 <th>Tanggal Lahir</th>
                                 <th>Jenis Kelamin</th>
@@ -36,7 +36,7 @@
                             @forelse($patients as $index => $patient)
                                 <tr>
                                     <td class="text-center">{{ $index + 1 }}</td>
-                                    <td class="fw-bold">{{ $patient->nama }}</td>
+                                    <td class="fw-bold">{{ $patient->name }}</td>
                                     <td>{{ $patient->nik }}</td>
                                     <td>{{ $patient->tanggal_lahir }}</td>
                                     <td>{{ $patient->jenis_kelamin }}</td>

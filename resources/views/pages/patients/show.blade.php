@@ -18,8 +18,8 @@
         <div class="card-body">
             <table class="table table-striped table-bordered">
                 <tr>
-                    <th width="30%">Nama </th>
-                    <td>{{ $patient->nama }}</td>
+                    <th width="30%">Name </th>
+                    <td>{{ $patient->name }}</td>
                 </tr>
                 <tr>
                     <th>NIK</th>
