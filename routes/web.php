@@ -36,7 +36,7 @@ Route::group([
     // Route for Specialist page
     Route::resource('/specialist', App\Http\Controllers\SpecialistController::class);
 
-     // Route for Doctor page
+    // Route for Doctor page
     Route::resource('/doctor', App\Http\Controllers\DoctorController::class);
 
     // Route for schedule page

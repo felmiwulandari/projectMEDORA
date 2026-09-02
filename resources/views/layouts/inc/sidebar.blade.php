@@ -41,14 +41,14 @@
 
             <!-- Nav Item - Schedule -->
             <li class="nav-item {{ request()->routeIs('admin.schedule.*') ? 'active' : '' }}">
-                <a class="nav-link" href="#">
+                <a class="nav-link" href="{{ route('admin.schedule.index') }}">
                     <i class="fas fa-calendar-alt"></i>
                     <span>Schedule</span></a>
             </li>  
 
             <!-- Nav Item - Registration -->
             <li class="nav-item {{ request()->routeIs('admin.registration.*') ? 'active' : '' }}">
-                <a class="nav-link" href="#">
+                <a class="nav-link" href="{{ route('admin.registration.index') }}">
                     <i class="fas fa-notes-medical"></i>
                     <span>Registration</span></a>
             </li>
