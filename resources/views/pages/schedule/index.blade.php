@@ -10,7 +10,7 @@
 <div class="card">
     <div class="card-header d-flex align-items-center justify-content-between">
         <h5 class="card-title mb-0">Data Schedule</h5>
-        <a href="{{ route('pages.Schedule.create') }}" class="btn btn-primary">
+        <a href="{{ route('admin.schedule.create') }}" class="btn btn-primary">
             <span class="fa fa-plus-circle mr-2"></span>
             <span>Create New</span>
         </a>
@@ -25,7 +25,8 @@
                     <th>Jam Mulai</th>
                     <th>Jam Selesai</th>
                     <th>Kuota</th>
-                    <th>status</th>
+                    <th>Status</th>
+                    <th>Aksi</th>
                 </tr>
             </thead>
 
@@ -38,17 +39,18 @@
                     <td>{{ $schedule->jam_selesai }}</td>
                     <td>{{ $schedule->kuota }}</td>
                     <td>{{ $schedule->status }}</td>
+                    <td>{{ $schedule->aksi }}</td>
 
                     <td>
-                        <a href="{{ route('pages.Schedule.show', encrypt($schedule->id)) }}" class="btn btn-link text-secondary p-0 mx-2">
+                        <a href="{{ route('admin.schedule.show', encrypt($schedule->id)) }}" class="btn btn-link text-secondary p-0 mx-2">
                             <span class="fa fa-search"></span>
                         </a>
 
-                        <a href="{{ route('pages.Schedule.edit', encrypt($schedule->id)) }}" class="btn btn-link p-0 mx-2">
+                        <a href="{{ route('admin.schedule.edit', encrypt($schedule->id)) }}" class="btn btn-link p-0 mx-2">
                             <span class="fa fa-edit"></span>
                         </a>
 
-                        <a href="javascript:void(0)" onclick="handleDestroy('{{ route('pages.Schedule.destroy', encrypt($schedule->id)) }}')" class="btn btn-link text-danger p-0 mx-2">
+                        <a href="javascript:void(0)" onclick="handleDestroy('{{ route('admin.schedule.destroy', encrypt($schedule->id)) }}')" class="btn btn-link text-danger p-0 mx-2">
                             <span class="fa fa-trash"></span>
                         </a>
                     </td>

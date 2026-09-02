@@ -45,13 +45,13 @@
         </table>
 
         <div class="d-flex align-items-center gap-2">
-            <a href="{{ route('pages.Schedule.index') }}" class="btn btn-primary">Kembali</a>
+            <a href="{{ route('admin.schedule.index') }}" class="btn btn-primary">Kembali</a>
 
-            <a href="{{ route('pages.Schedule.edit', encrypt($schedule->id)) }}" class="btn btn-link p-0 mx-2">
+            <a href="{{ route('admin.schedule.edit', encrypt($schedule->id)) }}" class="btn btn-link p-0 mx-2">
                 <span class="fa fa-edit"></span>
             </a>
 
-            <a href="javascript:void()" onclick="handleDestroy('{{ route('pages.Schedule.destroy', encrypt($schedule->id)) }}')" class="btn btn-link text-danger p-0 mx-2">
+            <a href="javascript:void()" onclick="handleDestroy('{{ route('admin.schedule.destroy', encrypt($schedule->id)) }}')" class="btn btn-link text-danger p-0 mx-2">
                 <span class="fa fa-trash"></span>
             </a>
         </div>

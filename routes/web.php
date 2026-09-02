@@ -1,14 +1,18 @@
 <?php
 
+use App\Http\Controllers\PatientController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\RegistrationController;
 use App\Http\Controllers\ScheduleController;
 use App\Models\Schedule;
 
 Route::get('/', function () {
-    return view('welcome');
+    return view ('welcome');
 });
 
+Route::resource('patients', PatientController::class);
+ 
 Auth::routes([
     'register' => false,
     'reset' => false,
@@ -32,9 +36,19 @@ Route::group([
     // Route for Specialist page
     Route::resource('/specialist', App\Http\Controllers\SpecialistController::class);
 
-    // Route for Doctor page
+     // Route for Doctor page
     Route::resource('/doctor', App\Http\Controllers\DoctorController::class);
 
-    // Route for Schedule page
+    // Route for schedule page
     Route::resource('/schedule', App\Http\Controllers\ScheduleController::class);
+
+    // Route for registration page
+    Route::resource('/registration', App\Http\Controllers\RegistrationController::class);
+
+    // Route untuk konfirmasi dan penolakan pendaftaran
+    Route::post('/registration/{id}/approve', [App\Http\Controllers\RegistrationController::class, 'approve'])
+        ->name('registration.approve');
+
+    Route::post('/registration/{id}/reject', [App\Http\Controllers\RegistrationController::class, 'reject'])
+        ->name('registration.reject');
 });
