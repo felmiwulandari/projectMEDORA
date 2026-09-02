@@ -3,15 +3,15 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Registration extends Model
 {
+    use HasFactory;
+
     protected $fillable = [
         'patient_id',
-        'specialist_id',
         'schedule_id',
-        'jam_mulai',
-        'jam_selesai',
         'tanggal_daftar',
         'status',
         'keluhan',
@@ -22,12 +22,6 @@ class Registration extends Model
     public function patient()
     {
         return $this->belongsTo(Patient::class, 'patient_id');
-    }
-
-    // Relasi ke Doctor
-    public function doctor()
-    {
-        return $this->belongsTo(Doctor::class, 'doctor_id');
     }
 
     // Relasi ke Schedule
@@ -41,8 +35,8 @@ class Registration extends Model
     {
         return match($this->status) {
             'menunggu' => '🟡 Menunggu',
-            'diterima' => '🟢 Diterima',
-            'ditutup' => '🔴 Ditolak',
+            'diterima' => '🟢 Di Konfirmasi',
+            'ditutup' => '🔴 Di Tolak',
             default => $this->status
         };
 

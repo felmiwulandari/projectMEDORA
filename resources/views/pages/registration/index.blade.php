@@ -36,24 +36,25 @@
                 </tr>
             </thead>
 
-            <tbody>
-               @foreach ($resgistrations as $registration)
+                       <tbody>
+               @foreach ($registrations as $registration)
                 <tr>
+                    <td>{{ $loop->iteration }}</td> <!-- Nomor urut -->
                     <td>{{ $registration->patient->name ?? 'Tidak ditemukan' }}</td>
-                    <td>{{ $registration->schedule->specialist->name ?? '-' }}</td>  {{-- LEWAT SCHEDULE --}}
-                    <td>{{ $registration->schedule->doctor->name ?? '-' }}</td>       {{-- LEWAT SCHEDULE --}}
-                    <td>{{ $registration->jam_mulai }}</td>
-                    <td>{{ $registration->jam_selesai }}</td>
+                    <td>{{ $registration->schedule->specialist->name ?? '-' }}</td>
+                    <td>{{ $registration->schedule->doctor->name ?? '-' }}</td>
+                    <td>{{ $registration->schedule->jam_mulai ?? '-' }}</td>
+                    <td>{{ $registration->schedule->jam_selesai ?? '-' }}</td>
                     <td>{{ \Carbon\Carbon::parse($registration->tanggal_daftar)->format('d-m-Y') }}</td>
                     <td>
-                            @if($registration->status == 'menunggu')
-                                <span class="badge badge-warning">🟡 Menunggu</span>
-                            @elseif($registration->status == 'diterima')
-                                <span class="badge badge-success">🟢 Diterima</span>
-                            @else
-                                <span class="badge badge-danger">🔴 Ditolak</span>
-                            @endif
-                        </td>
+                        @if($registration->status == 'menunggu')
+                            <span class="badge badge-warning">🟡 Menunggu</span>
+                        @elseif($registration->status == 'Di konfirmasi')
+                            <span class="badge badge-success">🟢 Di Konfirmasi</span>
+                        @elseif($registration->status == 'Di tolak')
+                            <span class="badge badge-danger">🔴 Di Tolak</span>
+                        @endif
+                    </td>
                     <td>{{ Str::limit($registration->keluhan, 20) }}</td>
                     <td>
                         {{-- DETAIL --}}
@@ -65,7 +66,7 @@
                         @if($registration->status == 'menunggu')
                         <form action="{{ route('admin.registration.approve', encrypt($registration->id)) }}" method="POST" class="d-inline">
                             @csrf
-                            <button type="submit" class="btn btn-link text-success p-0 mx-2" onclick="return confirm('Terima pendaftaran ini?')">
+                            <button type="submit" class="btn btn-link text-success p-0 mx-2" onclick="return confirm('Konfirmasi pendaftaran ini?')">
                                 <span class="fa fa-check-circle"></span>
                             </button>
                         </form>
@@ -89,10 +90,10 @@
     </div>
 </div>
 
-<form action="" id="form-destroy" method="POST">
+{{-- <form action="" id="form-destroy" method="POST">
     @csrf
     @method('DELETE')
-</form>
+</form> --}}
 @endsection
 
 @push('styles')
@@ -108,21 +109,21 @@ $(document).ready(function () {
     $(".datatable").DataTable();
 });
 
-function handleDestroy(url) {
-    Swal.fire({
-        title: "Apakah Anda Yakin?",
-        text: "Kamu tidak bisa mengembalikan data yang telah dihapus!",
-        icon: "warning",
-        showCancelButton: true,
-        confirmButtonText: "Ya Hapus",
-        cancelButtonText: "Batal",
-    }).then((result) => {
-        if (result.isConfirmed) {
-            $('#form-destroy').attr('action', url);
-            $('#form-destroy').submit();
-        }
-    });
-}
+// function handleDestroy(url) {
+//     Swal.fire({
+//         title: "Apakah Anda Yakin?",
+//         text: "Kamu tidak bisa mengembalikan data yang telah dihapus!",
+//         icon: "warning",
+//         showCancelButton: true,
+//         confirmButtonText: "Ya Hapus",
+//         cancelButtonText: "Batal",
+//     }).then((result) => {
+//         if (result.isConfirmed) {
+//             $('#form-destroy').attr('action', url);
+//             $('#form-destroy').submit();
+//         }
+//     });
+// }
 </script>
 
 @if (Session::has('success'))

@@ -15,8 +15,8 @@ class RegistrationController extends Controller
     {
         $registrations = Registration::with([
             'patient',
-            'specialist',
-            'schedule'
+            'schedule.doctor',      // Ambil dokter lewat schedule
+            'schedule.specialist'    // Ambil specialist lewat schedule
         ])
         ->orderBy('created_at', 'desc')
         ->paginate(10);
@@ -47,8 +47,8 @@ class RegistrationController extends Controller
     {
         $registration = Registration::with([
             'patient',
-            'specialist',
-            'schedule'
+            'schedule.doctor',      // Ambil dokter lewat schedule
+            'schedule.specialist'    // Ambil specialist lewat schedule'
         ])->findOrFail(decrypt($id));
 
         return view('pages.registration.show', compact('registration'));
@@ -85,7 +85,7 @@ class RegistrationController extends Controller
         $registration = Registration::findOrFail(decrypt($id));
 
         // Cek apakah status masih Menunggu
-        if ($registration->status !== 'Menunggu') {
+        if ($registration->status !== 'menunggu') {
             return redirect()->back()
                 ->with('error', 'Data sudah diproses sebelumnya!');
         }
@@ -119,7 +119,7 @@ class RegistrationController extends Controller
         $registration = Registration::findOrFail(decrypt($id));
 
         // Cek apakah status masih Menunggu
-        if ($registration->status !== 'Menunggu') {
+        if ($registration->status !== 'menunggu') {
             return redirect()->back()
                 ->with('error', 'Data sudah diproses sebelumnya!');
         }
