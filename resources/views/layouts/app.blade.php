@@ -128,6 +128,29 @@
     <!-- Custom scripts for all pages-->
     <script src="{{ asset('js/sb-admin-2.min.js') }}"></script>
 
+    <!-- SweetAlert -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    <!-- Logout -->
+    <script>
+    function actionLogout(event) {
+        event.preventDefault();
+
+        Swal.fire({
+            title: "Yakin ingin logout?",
+            text: "Kamu harus login kembali untuk masuk.",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonText: "Ya, Logout",
+            cancelButtonText: "Batal"
+        }).then((result) => {
+            if (result.isConfirmed) {
+                document.getElementById('form-logout').submit();
+            }
+        });
+    }
+    </script>
+
     @stack('scripts')
 </body>
 

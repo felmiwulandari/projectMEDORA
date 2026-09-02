@@ -29,9 +29,6 @@ Route::group([
     Route::get('/', [App\Http\Controllers\HomeController::class, 'index']);
     Route::get('/dashboard', [App\Http\Controllers\HomeController::class, 'index'])->name('dashboard');
 
-    // Route for Home
-    Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
-
     // Route for Specialist page
     Route::resource('/specialist', App\Http\Controllers\SpecialistController::class);
 

@@ -25,11 +25,8 @@
                                     Profile
                                 </a>
                                 <div class="dropdown-divider"></div>
-                                <a class="dropdown-item" href="#"
-                                    onclick="
-                                    event.preventDefault();
-                                    $('#form-logout').submit();
-                                    ">
+                                
+                                <a class="dropdown-item" href="#" onclick="actionLogout(event)">
                                     <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
                                     Logout
                                 </a>
@@ -38,6 +35,7 @@
                                     method="POST" class="d-none">
                                     @csrf
                                 </form>
+
                             </div>
                         </li>
                     </ul>
