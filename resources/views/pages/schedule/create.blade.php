@@ -11,7 +11,7 @@
     <div class="row">
         <div class="col-md-6">
             <div class="card">
-                <form action="{{ route('pages.Schedule.store') }}" method="POST">
+                <form action="{{ route('admin.schedule.store') }}" method="POST">
                     @csrf
 
                     <div class="card-header">
@@ -103,7 +103,7 @@
                             <span class="fa fa-save"></span> Save
                         </button>
 
-                        <a href="{{ route('pages.Schedule.index') }}" class="btn btn-secondary">
+                        <a href="{{ route('admin.schedule.index') }}" class="btn btn-secondary">
                             <span class="fa fa-times-circle"></span> Cancel
                         </a>
                     </div>

@@ -1,10 +1,11 @@
 <?php
 
 namespace App\Http\Controllers;
-
+use App\Models\Patient;
 use App\Models\Registration;
 use App\Models\Schedule;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB; //
 
 class RegistrationController extends Controller
 {
@@ -37,8 +38,38 @@ class RegistrationController extends Controller
      */
     public function store(Request $request)
     {
-        //
+         $request->validate([
+            'name' => 'required',
+            'nik' => 'required|unique:patients,nik',
+            'tanggal_lahir' => 'required|date',
+            'jenis_kelamin' => 'required',
+            'no_hp' => 'required',
+            'alamat' => 'required',
+            'schedule_id' => 'required|exists:schedules,id',
+            'keluhan' => 'required',
+        ]);
+
+        DB::transaction(function () use ($request) {
+
+            $patient = Patient::create([
+                'name' => $request->name,
+                'nik' => $request->nik,
+                'tanggal_lahir' => $request->tanggal_lahir,
+                'jenis_kelamin' => $request->jenis_kelamin,
+                'no_hp' => $request->no_hp,
+                'alamat' => $request->alamat,
+            ]);
+
+            Registration::create([
+                'patient_id' => $patient->id,
+                'schedule_id' => $request->schedule_id,
+                'tanggal_daftar' => now()->toDateString(),
+                'keluhan' => $request->keluhan,
+                'status' => 'menunggu',
+            ]);
+        });
     }
+
 
     /**
      * Display the specified resource.
