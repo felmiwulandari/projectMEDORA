@@ -30,7 +30,8 @@ class RegistrationController extends Controller
      */
     public function create()
     {
-        //
+        $schedules = Schedule::with(['doctor', 'specialist'])->get();
+        return view('pages.registration.create', compact('schedules'));
     }
 
     /**
