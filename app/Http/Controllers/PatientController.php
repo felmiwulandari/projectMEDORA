@@ -16,7 +16,7 @@ class PatientController extends Controller
     {
         $patients = Patient::all();
 
-        return view('patients.index', compact('patients'));
+        return view('pages.patients.index', compact('patients'));
     }
 
     /**
@@ -63,6 +63,6 @@ class PatientController extends Controller
      */
     public function show(Patient $patient)
     {
-        return view('pages.patient.show', compact('patient'));
+        return view('pages.patients.show', compact('patient'));
     }
 }

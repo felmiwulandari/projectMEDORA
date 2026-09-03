@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Doctor;
 use Illuminate\Http\Request;
 
-class DoctorsController extends Controller
+class DoctorController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -13,7 +13,7 @@ class DoctorsController extends Controller
     public function index()
     {
         $doctors = Doctor::paginate(10);
-        return view('pages.doctors.index', compact('doctors'));
+        return view('pages.doctor.index', compact('doctors'));
     }
 
     /**
@@ -21,7 +21,7 @@ class DoctorsController extends Controller
      */
     public function create()
     {
-        return view('pages.doctors.create');
+        return view('pages.doctor.create');
     }
 
     /**
@@ -35,25 +35,25 @@ class DoctorsController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(doctors $doctors)
+    public function show(string $id)
     {
         $doctor = Doctor::findOrFail($id);
-        return view ('pages.doctors.show', compact('doctor'));
+        return view ('pages.doctor.show', compact('doctor'));
     }
 
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(doctors $doctors)
+    public function edit(string $id)
     {
         $doctor = Doctor::findOrFail($id);
-        return view('pages.doctors.edit', compact('doctor'));
+        return view('pages.doctor.edit', compact('doctor'));
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, doctors $doctors)
+    public function update(Request $request, doctor $doctors)
     {
         //
     }
@@ -61,7 +61,7 @@ class DoctorsController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(doctors $doctors)
+    public function destroy(string $id)
     {
         $doctor = Doctor::findOrFail(decrypt($id));
         $doctor->delete();

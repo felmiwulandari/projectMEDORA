@@ -2,7 +2,11 @@
 
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\PatientController; 
+use App\Http\Controllers\PatientController;
+use App\Http\Controllers\DoctorController;
+use App\Http\Controllers\SpecialistController; 
+use App\Http\Controllers\ScheduleController;
+use App\Models\Schedule;
 
 Route::get('/', [PatientController::class, 'create'])->name('home');
 
@@ -17,7 +21,7 @@ Auth::routes([
 
 Route::group([
     'prefix' => 'admin',
-    'as' => 'admin.', 
+    'as' => 'admin.',
     'middleware' => 'auth',
 ], function () {
 
@@ -26,4 +30,10 @@ Route::group([
     Route::get('/dashboard', [App\Http\Controllers\HomeController::class, 'index'])->name('dashboard');
 
     Route::resource('patient', PatientController::class)->only(['index', 'show']);
+
+    Route::resource('doctor', DoctorController::class);
+
+    Route::resource('specialist', SpecialistController::class); 
+
+    Route::resource('schedule', ScheduleController::class);
 });
