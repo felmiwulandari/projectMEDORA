@@ -3,7 +3,7 @@
 @section('content')
 
 <div class="container min-vh-100 d-flex align-items-center justify-content-center">
-    <form id="patientForm" class="w-100" action="{{ route('patient.store') }}" method="POST">
+    <form id="patientForm" class="w-100" action="{{ route('registration.store') }}" method="POST">
         @csrf
 
         @if(session('success'))

@@ -14,6 +14,11 @@ Route::get('/', function () {
     return view('welcome', compact('specialists'));
 });
 
+//Route for Registration page
+    Route::post('/registration', [RegistrationController::class, 'store'])
+    ->name('registration.store');
+
+
 Auth::routes([
     'register' => false,
     'reset' => false,

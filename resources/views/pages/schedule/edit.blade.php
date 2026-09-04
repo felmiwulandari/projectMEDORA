@@ -8,7 +8,7 @@
         
         <div class="row">
             <div class="col-md-6">
-                <form action="{{ route('pages.Schedule.update', encrypt($schedule->id)) }}" method="POST">
+                <form action="{{ route('admin.schedule.update', encrypt($schedule->id)) }}" method="POST">
                     @csrf
                     @method('PUT')
 
@@ -91,7 +91,7 @@
                     <br>
 
                     <button type="submit" class="btn btn-primary">Simpan</button>
-                    <a href="{{ route('pages.Schedule.index') }}" class="btn btn-secondary">Batal</a>
+                    <a href="{{ route('admin.schedule.index') }}" class="btn btn-secondary">Batal</a>
                 </form>
             </div>
         </div>

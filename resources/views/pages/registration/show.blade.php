@@ -6,7 +6,7 @@
     <div class="container py-4">
         <h1 class="page-title mb-3">Registration Detail!</h1>
         
-        <table class="table table-striped">
+                <table class="table table-striped">
             <tr>
                 <th width="200px">ID</th>
                 <td>{{ $registration->id }}</td>
@@ -17,11 +17,11 @@
             </tr>
             <tr>
                 <th width="200px">Nama Dokter</th>
-                <td>{{ $registration->doctor->name ?? 'Tidak ditemukan' }}</td>
+                <td>{{ $registration->schedule->doctor->name ?? 'Tidak ditemukan' }}</td>
             </tr>
             <tr>
                 <th width="200px">Spesialis</th>
-                <td>{{ $registration->doctor->specialist ?? '-' }}</td>
+                <td>{{ $registration->schedule->specialist->name ?? '-' }}</td>
             </tr>
             <tr>
                 <th width="200px">Tanggal Daftar</th>
@@ -29,11 +29,11 @@
             </tr>
             <tr>
                 <th width="200px">Jam Mulai</th>
-                <td>{{ $registration->jam_mulai }}</td>
+                <td>{{ $registration->schedule->jam_mulai ?? '-' }}</td>
             </tr>
             <tr>
                 <th width="200px">Jam Selesai</th>
-                <td>{{ $registration->jam_selesai }}</td>
+                <td>{{ $registration->schedule->jam_selesai ?? '-' }}</td>
             </tr>
             <tr>
                 <th width="200px">Keluhan</th>
@@ -44,9 +44,9 @@
                 <td>
                     @if($registration->status == 'menunggu')
                         <span class="badge badge-warning">🟡 Menunggu</span>
-                    @elseif($registration->status == 'diterima')
+                    @elseif($registration->status == 'Di konfirmasi')
                         <span class="badge badge-success">🟢 Di konfirmasi</span>
-                    @else
+                    @elseif($registration->status == 'Di tolak')
                         <span class="badge badge-danger">🔴 Di tolak</span>
                     @endif
                 </td>
@@ -67,10 +67,10 @@
         </div>
     </div>
 
-    <form action="" id="form-destroy" method="POST">
+    {{-- <form action="" id="form-destroy" method="POST">
         @csrf
         @method('DELETE')
-    </form>
+    </form> --}}
 @endsection
 
 @push('styles')
@@ -84,21 +84,20 @@
 <script type="text/javascript">
     $('.datatable').dataTable();
     
-function handleDestroy(url) {
-    Swal.fire({
-        title: "Apakah Anda yakin?",
-        text: "Kamu tidak bisa mengembalikan data yang telah di hapus!",
-        icon: "warning",
-        showCancelButton: true,
-        confirmButtonText: "Ya Hapus",
-        cancelButtonText: "Batal",
-    }).then((result) => {
-        if (result.isConfirmed) {
-            $('#form-destroy').attr('action', url);
-            $('#form-destroy').submit(); 
-        }
-    });
-}
+// function handleDestroy(url) {
+//     Swal.fire({
+//         title: "Apakah Anda yakin?",
+//         text: "Kamu tidak bisa mengembalikan data yang telah di hapus!",
+//         icon: "warning",
+//         showCancelButton: true,
+//         confirmButtonText: "Ya Hapus",
+//         cancelButtonText: "Batal",
+//     }).then((result) => {
+//         if (result.isConfirmed) {
+//             $('#form-destroy').attr('action', url);
+//             $('#form-destroy').submit(); 
+//         }
+//     });
 </script>
 
 @if (Session::has('success'))

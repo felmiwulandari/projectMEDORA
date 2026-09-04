@@ -18,8 +18,14 @@ class DatabaseSeeder extends Seeder
 
             $this->call([
             SpecialistSeeder::class,
+<<<<<<< HEAD
             UserSeeder::class,
             DoctorSeeder::class
+=======
+            DoctorSeeder::class,
+            SpecialistSeeder::class,
+            RegistrationSeeder::class,
+>>>>>>> origin/fitur-registration
         ]);
 
 
