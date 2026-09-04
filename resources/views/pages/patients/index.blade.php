@@ -12,9 +12,6 @@
         <div class="card shadow-sm border-0">
             <div class="card-header bg-white py-3 d-flex justify-content-between align-items-center">
                 <h5 class="m-0 font-weight-bold text-primary">Data Pasien</h5>
-                <a href="{{ route('patients.create') }}" class="btn btn-primary btn-sm">
-                    Tambah Pasien
-                </a>
             </div>
 
             <div class="card-body">
@@ -23,7 +20,7 @@
                         <thead class="table-primary text-center">
                             <tr>
                                 <th>No</th>
-                                <th>Nama</th>
+                                <th>Name</th>
                                 <th>NIK</th>
                                 <th>Tanggal Lahir</th>
                                 <th>Jenis Kelamin</th>
@@ -36,7 +33,7 @@
                             @forelse($patients as $index => $patient)
                                 <tr>
                                     <td class="text-center">{{ $index + 1 }}</td>
-                                    <td class="fw-bold">{{ $patient->nama }}</td>
+                                    <td class="fw-bold">{{ $patient->name }}</td>
                                     <td>{{ $patient->nik }}</td>
                                     <td>{{ $patient->tanggal_lahir }}</td>
                                     <td>{{ $patient->jenis_kelamin }}</td>

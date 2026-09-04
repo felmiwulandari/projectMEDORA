@@ -1,18 +1,19 @@
 <?php
 
-use App\Http\Controllers\PatientController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\RegistrationController;
 use App\Http\Controllers\ScheduleController;
+use App\Http\Controllers\PatientController;
 use App\Models\Schedule;
 
+// AKSES PASIEN
 Route::get('/', function () {
-    return view ('welcome');
+    $specialists = \App\Models\Specialist::where('status', 'aktif')->get();
+
+    return view('welcome', compact('specialists'));
 });
 
-Route::resource('patients', PatientController::class);
- 
 Auth::routes([
     'register' => false,
     'reset' => false,
@@ -38,6 +39,12 @@ Route::group([
 
     // Route for Doctor page
     Route::resource('/doctor', App\Http\Controllers\DoctorController::class);
+
+    // Route for Patient page
+    Route::resource('/patient', PatientController::class)->only([
+        'index',
+        'show'
+    ]);
 
     // Route for schedule page
     Route::resource('/schedule', App\Http\Controllers\ScheduleController::class);
