@@ -32,13 +32,18 @@ Route::group([
 
     Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 
+    // Dashboard page
     Route::get('/dashboard', [App\Http\Controllers\HomeController::class, 'index'])->name('dashboard');
 
+    // Patient page
     Route::resource('patient', PatientController::class)->only(['index', 'show']);
 
+    // Doctor page
     Route::resource('doctor', DoctorController::class);
 
+    // Spesialist page
     Route::resource('specialist', SpecialistController::class);
 
+    // Schedule page
     Route::resource('schedule', ScheduleController::class);
 });
