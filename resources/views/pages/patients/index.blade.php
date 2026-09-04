@@ -12,9 +12,6 @@
         <div class="card shadow-sm border-0">
             <div class="card-header bg-white py-3 d-flex justify-content-between align-items-center">
                 <h5 class="m-0 font-weight-bold text-primary">Data Pasien</h5>
-                <a href="{{ route('patients.create') }}" class="btn btn-primary btn-sm">
-                    Tambah Pasien
-                </a>
             </div>
 
             <div class="card-body">
