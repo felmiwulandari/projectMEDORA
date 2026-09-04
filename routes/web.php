@@ -51,6 +51,9 @@ Route::group([
 
     Route::post('/registration/{id}/reject', [App\Http\Controllers\RegistrationController::class, 'reject'])
         ->name('registration.reject');
+
+    Route::post('/registration', [RegistrationController::class, 'store'])
+        ->name('registration.store');
 });
 
 
