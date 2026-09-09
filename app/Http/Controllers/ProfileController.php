@@ -27,25 +27,31 @@ class ProfileController extends Controller
         $user = Auth::user();
 
         $request->validate([
-            'name' => 'required|string|max:255',
-            'email' => 'required|string|max:255|unique:users,email,'. $user->id,
+            'name' => 'nullable|string|max:255',
+            'email' => 'nullable|string|email|max:255|unique:users,email,'. $user->id,
             'password' => 'nullable|string|min:8|confirmed|regex:/[a-z]/|regex:/[A-Z]/|regex:/[0-9]/|regex:/[!@#$%^&*?]/',
         ], [
+            'email.email' => 'Please enter a valid email address',
             'password.regex' => 'Password must contain at least one uppercase, one lowercase, one number, and one special character (!@#$%^&*?)',
             'password.min' => 'Password must be at least 8 characters',
             'password.confirmed' => 'Password confirmation does not match',
         ]);
 
-        $user->name = $request->name;
-        $user->email = $request->email;
+        if ($request->filled('name')) {
+            $user->name = $request->name;
+        }
 
-        if($request->filled('password')) {
+        if ($request->filled('email')) {
+            $user->email = $request->email;
+        }
+
+        if ($request->filled('password')) {
             $user->password = bcrypt($request->password);
         }
 
         $user->save();
 
-        return redirect()->route('admin.profile')
+        return redirect()->route('admin.admin.index')
             ->with('success', 'Profile updated successfully.');
     }
 }
