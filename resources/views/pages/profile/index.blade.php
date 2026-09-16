@@ -42,7 +42,7 @@
                         @error('password')
                             <div class="text-danger">{{ $message }}</div>
                         @enderror
-                        <small class="text-muted">Kosongkan jika tidak ingin mengubah password</small>
+                        <small class="text-danger">Kosongkan jika tidak ingin mengubah password</small>
                     </div>
 
                     <div class="mb-3">

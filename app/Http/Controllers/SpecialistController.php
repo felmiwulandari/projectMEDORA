@@ -13,6 +13,7 @@ class SpecialistController extends Controller
     public function index()
     {
         $specialists = Specialist::all();
+
         return view('pages.specialist.index', compact('specialists'));
     }
 
@@ -32,15 +33,20 @@ class SpecialistController extends Controller
         $request->validate([
             'name' => 'required|string|max:225',
             'status' => 'required',
+        ], [
+            'name.required' => 'Nama spesialis harus diisi.',
+            'name.string' => 'Nama spesialis harus berupa teks.',
+            'name.max' => 'Nama spesialis maksimal 225 karakter.',
+            'status.required' => 'Status harus dipilih.',
         ]);
 
-        $specialists = Specialist::create([
+        Specialist::create([
             'name' => $request->name,
             'status' => $request->status,
         ]);
 
         return redirect()->route('admin.specialist.index')
-         ->with('success', 'Create new specialist is successfully!');
+            ->with('success', 'Spesialis berhasil ditambahkan.');
     }
 
     /**
@@ -49,6 +55,7 @@ class SpecialistController extends Controller
     public function show(string $id)
     {
         $specialists = Specialist::findOrFail(decrypt($id));
+
         return view('pages.specialist.show', compact('specialists'));
     }
 
@@ -58,6 +65,7 @@ class SpecialistController extends Controller
     public function edit(string $id)
     {
         $specialists = Specialist::findOrFail(decrypt($id));
+
         return view('pages.specialist.edit', compact('specialists'));
     }
 
@@ -68,17 +76,23 @@ class SpecialistController extends Controller
     {
         $request->validate([
             'name' => 'required|string|max:225',
-            'status' => 'required'
+            'status' => 'required',
+        ], [
+            'name.required' => 'Nama spesialis harus diisi.',
+            'name.string' => 'Nama spesialis harus berupa teks.',
+            'name.max' => 'Nama spesialis maksimal 225 karakter.',
+            'status.required' => 'Status harus dipilih.',
         ]);
 
         $specialists = Specialist::findOrFail($id);
+
         $specialists->update([
             'name' => $request->name,
             'status' => $request->status,
         ]);
 
         return redirect()->route('admin.specialist.index')
-            ->with('success', 'Specialist data successfully updated!');
+            ->with('success', 'Data spesialis berhasil diperbarui.');
     }
 
     /**
@@ -87,9 +101,10 @@ class SpecialistController extends Controller
     public function destroy(string $id)
     {
         $specialists = Specialist::findOrFail(decrypt($id));
+
         $specialists->delete();
- 
+
         return redirect()->route('admin.specialist.index')
-        ->with('success', 'Delete successfully for ID:' . (decrypt($id)));
+            ->with('success', 'Spesialis berhasil dihapus.');
     }
 }

@@ -20,16 +20,9 @@
 
             <!-- Nav Item - Patient -->
             <li class="nav-item {{ request()->routeIs('admin.patient.*') ? 'active' : '' }}">
-                <a class="nav-link" href="#">
+                <a class="nav-link" href="{{ route('admin.patient.index') }}">
                     <i class="fas fa-hospital-user"></i>
                     <span>Patient</span></a>
-            </li>
-
-            <!-- Nav Item - Doctor -->
-            <li class="nav-item {{ request()->routeIs('admin.doctor.*') ? 'active' : '' }}">
-                <a class="nav-link" href="{{ route('admin.doctor.index') }}">
-                    <i class="fas fa-user-md"></i>
-                    <span>Doctor</span></a>
             </li>
 
              <!-- Nav Item - Specialist -->
@@ -37,6 +30,13 @@
                 <a class="nav-link" href="{{ route('admin.specialist.index') }}">
                     <i class="fas fa-stethoscope"></i>
                     <span>Specialist</span></a>
+            </li>
+
+            <!-- Nav Item - Doctor -->
+            <li class="nav-item {{ request()->routeIs('admin.doctor.*') ? 'active' : '' }}">
+                <a class="nav-link" href="{{ route('admin.doctor.index') }}">
+                    <i class="fas fa-user-md"></i>
+                    <span>Doctor</span></a>
             </li>
 
             <!-- Nav Item - Schedule -->

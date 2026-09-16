@@ -28,7 +28,7 @@ class RegistrationFactory extends Factory
             'patient_id' => $patient->id,
             'schedule_id' => $schedule->id,
             'tanggal_daftar' => fake()->dateTimeBetween('now', '+1 month'),
-            'status' => fake()->randomElement(['menunggu', 'Di konfirmasi', 'Di tolak']),
+            'status' => fake()->randomElement(['menunggu', 'dikonfirmasi', 'ditolak']),
             'keluhan' => fake()->sentence(10),
         ];
     }

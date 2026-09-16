@@ -1,48 +1,61 @@
 @extends('layouts.app')
 
-@section('title', 'Patient detail')
+@section('title', 'Patient page')
 
 @section('content')
-<div class="container-fluid">
-    <div class="d-sm-flex align-items-center justify-content-between mb-4">
-        <h1 class="h3 mb-0 text-gray-800">PATIENT DETAIL</h1>
-        <a href="{{ route('patients.index') }}" class="btn btn-secondary btn-sm">
-            <i class="fas fa-arrow-left"></i> Back
-        </a>
-    </div>
-
-    <div class="card shadow mb-4">
-        <div class="card-header py-3 bg-primary text-white">
-            <h6 class="m-0 font-weight-bold">Informasi Lengkap Pasien</h6>
-        </div>
-        <div class="card-body">
-            <table class="table table-striped table-bordered">
+    <div class="container py-4">
+        <h1 class="page-title mb-3">Patient Details!</h1>
+            <table class="table table-striped">
                 <tr>
-                    <th width="30%">Name </th>
+                    <th width="200px">ID</th>
+                    <td>{{ $patient->id }}</td>
+                </tr>
+
+                <tr>
+                    <th width="200px">Name</th>
                     <td>{{ $patient->name }}</td>
                 </tr>
+
                 <tr>
-                    <th>NIK</th>
+                    <th width="200px">NIK</th>
                     <td>{{ $patient->nik }}</td>
                 </tr>
+
                 <tr>
-                    <th>Tanggal Lahir</th>
+                    <th width="200px">Tanggal Lahir</th>
                     <td>{{ $patient->tanggal_lahir }}</td>
                 </tr>
+
                 <tr>
-                    <th>Jenis kelamin</th>
+                    <th width="200px">Jenis Kelamin</th>
                     <td>{{ $patient->jenis_kelamin }}</td>
                 </tr>
+
                 <tr>
-                    <th>No HP</th>
+                    <th width="200px">No Hp</th>
                     <td>{{ $patient->no_hp }}</td>
                 </tr>
+
                 <tr>
-                    <th>Alamat</th>
+                    <th width="200px">Alamat</th>
                     <td>{{ $patient->alamat }}</td>
                 </tr>
+
+                <tr>
+                    <th width="200px">Terdaftar pada</th>
+                    <td>{{ \Carbon\Carbon::parse($patient->created_at)->isoFormat('DD MMMM Y HH:mm:ss') }}</td>
+                </tr>
+                <tr>
+                    <th width="200px">Diperbarui pada</th>
+                    <td>{{ \Carbon\Carbon::parse($patient->updated_at)->isoFormat('DD MMMM Y HH:mm:ss')  }}</td>
+                </tr>
             </table>
-        </div>
+
+            <div class="d-flex align-items-center gap-2">
+                <a href="{{ route('admin.patient.index') }}" class="btn btn-primary mr-2">
+                    Kembali
+                </a>
+            </div>
     </div>
-</div>
+    
 @endsection

@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Schedule;
-use App\Models\Doctor; // 
+use App\Models\Doctor;
 use Illuminate\Http\Request;
 
 class ScheduleController extends Controller
@@ -14,6 +14,7 @@ class ScheduleController extends Controller
     public function index()
     {
         $schedules = Schedule::paginate(10);
+
         return view('pages.schedule.index', compact('schedules'));
     }
 
@@ -22,7 +23,8 @@ class ScheduleController extends Controller
      */
     public function create()
     {
-        $doctors = Doctor::all(); // 
+        $doctors = Doctor::all();
+
         return view('pages.schedule.create', compact('doctors'));
     }
 
@@ -32,18 +34,37 @@ class ScheduleController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'tanggal'     => 'required|date|after_or_equal:today', //
-            'jam_mulai'   => 'required|date_format:H:i',
-            'jam_selesai' => 'required|date_format:H:i|after:jam_mulai', // 
-            'kuota'       => 'required|integer|min:1|max:100', // 
-            'status'      => 'required|in:aktif,tidak aktif',
-            'doctor_id'   => 'required|exists:doctors,id',
-        ], [ //  CUSTOM ERROR MESSAGE
-            'jam_selesai.after' => 'Jam selesai harus lebih besar dari jam mulai',
-            'tanggal.after_or_equal' => 'Tanggal tidak boleh kurang dari hari ini',
+            'tanggal' => 'required|date|after_or_equal:today',
+            'jam_mulai' => 'required|date_format:H:i',
+            'jam_selesai' => 'required|date_format:H:i|after:jam_mulai',
+            'kuota' => 'required|integer|min:1|max:100',
+            'status' => 'required|in:aktif,tidak aktif',
+            'doctor_id' => 'required|exists:doctors,id',
+        ], [
+            'tanggal.required' => 'Tanggal harus diisi.',
+            'tanggal.date' => 'Format tanggal tidak valid.',
+            'tanggal.after_or_equal' => 'Tanggal tidak boleh kurang dari hari ini.',
+
+            'jam_mulai.required' => 'Jam mulai harus diisi.',
+            'jam_mulai.date_format' => 'Format jam mulai harus HH:MM.',
+
+            'jam_selesai.required' => 'Jam selesai harus diisi.',
+            'jam_selesai.date_format' => 'Format jam selesai harus HH:MM.',
+            'jam_selesai.after' => 'Jam selesai harus lebih besar dari jam mulai.',
+
+            'kuota.required' => 'Kuota harus diisi.',
+            'kuota.integer' => 'Kuota harus berupa angka.',
+            'kuota.min' => 'Kuota minimal 1.',
+            'kuota.max' => 'Kuota maksimal 100.',
+
+            'status.required' => 'Status harus dipilih.',
+            'status.in' => 'Status tidak valid.',
+
+            'doctor_id.required' => 'Dokter harus dipilih.',
+            'doctor_id.exists' => 'Dokter tidak ditemukan.',
         ]);
 
-        //  CEK DUPLIKAT
+        // Cek duplikat jadwal
         $existing = Schedule::where('doctor_id', $request->doctor_id)
             ->where('tanggal', $request->tanggal)
             ->where('jam_mulai', $request->jam_mulai)
@@ -56,18 +77,17 @@ class ScheduleController extends Controller
         }
 
         Schedule::create([
-            'tanggal'    => $request->tanggal,
-            'jam_mulai'  => $request->jam_mulai,
-            'jam_selesai'=> $request->jam_selesai,
-            'kuota'      => $request->kuota,
-            'status'     => $request->status,
-            'doctor_id'  => $request->doctor_id,
+            'tanggal' => $request->tanggal,
+            'jam_mulai' => $request->jam_mulai,
+            'jam_selesai' => $request->jam_selesai,
+            'kuota' => $request->kuota,
+            'status' => $request->status,
+            'doctor_id' => $request->doctor_id,
         ]);
 
-        // REDIRECT
         return redirect()
             ->route('admin.schedule.index')
-            ->with('success', 'Berhasil menambahkan data schedule.');
+            ->with('success', 'Berhasil menambahkan data jadwal.');
     }
 
     /**
@@ -75,7 +95,9 @@ class ScheduleController extends Controller
      */
     public function show(string $id)
     {
-        $schedule = Schedule::with('doctor')->findOrFail(decrypt($id)); // 
+        $schedule = Schedule::with('doctor')
+            ->findOrFail(decrypt($id));
+
         return view('pages.schedule.show', compact('schedule'));
     }
 
@@ -85,8 +107,9 @@ class ScheduleController extends Controller
     public function edit(string $id)
     {
         $schedule = Schedule::findOrFail(decrypt($id));
-        $doctors = Doctor::all(); // 
-        return view('pages.schedule.edit', compact('schedule', 'doctors')); // 
+        $doctors = Doctor::all();
+
+        return view('pages.schedule.edit', compact('schedule', 'doctors'));
     }
 
     /**
@@ -97,18 +120,37 @@ class ScheduleController extends Controller
         $schedule = Schedule::findOrFail(decrypt($id));
 
         $request->validate([
-            'tanggal'     => 'required|date|after_or_equal:today', //
-            'jam_mulai'   => 'required|date_format:H:i',
-            'jam_selesai' => 'required|date_format:H:i|after:jam_mulai', // 
-            'kuota'       => 'required|integer|min:1|max:100', // 
-            'status'      => 'required|in:aktif,tidak aktif',
-            'doctor_id'   => 'required|exists:doctors,id',
-        ], [ //  CUSTOM ERROR MESSAGE
-            'jam_selesai.after' => 'Jam selesai harus lebih besar dari jam mulai',
-            'tanggal.after_or_equal' => 'Tanggal tidak boleh kurang dari hari ini',
+            'tanggal' => 'required|date|after_or_equal:today',
+            'jam_mulai' => 'required|date_format:H:i',
+            'jam_selesai' => 'required|date_format:H:i|after:jam_mulai',
+            'kuota' => 'required|integer|min:1|max:100',
+            'status' => 'required|in:aktif,tidak aktif',
+            'doctor_id' => 'required|exists:doctors,id',
+        ], [
+            'tanggal.required' => 'Tanggal harus diisi.',
+            'tanggal.date' => 'Format tanggal tidak valid.',
+            'tanggal.after_or_equal' => 'Tanggal tidak boleh kurang dari hari ini.',
+
+            'jam_mulai.required' => 'Jam mulai harus diisi.',
+            'jam_mulai.date_format' => 'Format jam mulai harus HH:MM.',
+
+            'jam_selesai.required' => 'Jam selesai harus diisi.',
+            'jam_selesai.date_format' => 'Format jam selesai harus HH:MM.',
+            'jam_selesai.after' => 'Jam selesai harus lebih besar dari jam mulai.',
+
+            'kuota.required' => 'Kuota harus diisi.',
+            'kuota.integer' => 'Kuota harus berupa angka.',
+            'kuota.min' => 'Kuota minimal 1.',
+            'kuota.max' => 'Kuota maksimal 100.',
+
+            'status.required' => 'Status harus dipilih.',
+            'status.in' => 'Status tidak valid.',
+
+            'doctor_id.required' => 'Dokter harus dipilih.',
+            'doctor_id.exists' => 'Dokter tidak ditemukan.',
         ]);
 
-        // CEK DUPLIKAT (KECUALI DIRINYA SENDIRI)
+        // Cek duplikat kecuali jadwal yang sedang diedit
         $existing = Schedule::where('doctor_id', $request->doctor_id)
             ->where('tanggal', $request->tanggal)
             ->where('jam_mulai', $request->jam_mulai)
@@ -122,17 +164,17 @@ class ScheduleController extends Controller
         }
 
         $schedule->update([
-            'tanggal'    => $request->tanggal,
-            'jam_mulai'  => $request->jam_mulai,
-            'jam_selesai'=> $request->jam_selesai,
-            'kuota'      => $request->kuota,
-            'status'     => $request->status,
-            'doctor_id'  => $request->doctor_id,
+            'tanggal' => $request->tanggal,
+            'jam_mulai' => $request->jam_mulai,
+            'jam_selesai' => $request->jam_selesai,
+            'kuota' => $request->kuota,
+            'status' => $request->status,
+            'doctor_id' => $request->doctor_id,
         ]);
 
         return redirect()
             ->route('admin.schedule.index')
-            ->with('success', 'Berhasil mengubah data schedule.');
+            ->with('success', 'Berhasil mengubah data jadwal.');
     }
 
     /**
@@ -146,6 +188,32 @@ class ScheduleController extends Controller
 
         return redirect()
             ->route('admin.schedule.index')
-            ->with('success', 'Berhasil menghapus data schedule.');
+            ->with('success', 'Berhasil menghapus data jadwal.');
+    }
+
+    /**
+     * Get doctors by specialist.
+     */
+    public function getDoctorsBySpecialist($specialist_id)
+    {
+        $doctors = Doctor::where('specialist_id', $specialist_id)
+            ->where('status', 'Aktif')
+            ->get();
+
+        return response()->json($doctors);
+    }
+
+    /**
+     * Get schedules by doctor.
+     */
+    public function getSchedulesByDoctor($doctor_id)
+    {
+        $schedules = Schedule::where('doctor_id', $doctor_id)
+            ->where('status', 'aktif')
+            ->where('tanggal', '>=', today())
+            ->where('kuota', '>', 0)
+            ->get();
+
+        return response()->json($schedules);
     }
 }

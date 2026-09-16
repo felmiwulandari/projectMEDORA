@@ -41,18 +41,18 @@
                 <tr>
                     <td>{{ $loop->iteration }}</td> <!-- Nomor urut -->
                     <td>{{ $registration->patient->name ?? 'Tidak ditemukan' }}</td>
-                    <td>{{ $registration->schedule->specialist->name ?? '-' }}</td>
+                    <td>{{ $registration->schedule->doctor->specialist->name ?? '-' }}</td>
                     <td>{{ $registration->schedule->doctor->name ?? '-' }}</td>
-                    <td>{{ $registration->schedule->jam_mulai ?? '-' }}</td>
-                    <td>{{ $registration->schedule->jam_selesai ?? '-' }}</td>
+                    <td>{{ \Carbon\Carbon::parse($registration->schedule->jam_mulai)->format('H:i') }}</td>
+                    <td>{{ \Carbon\Carbon::parse($registration->schedule->jam_selesai)->format('H:i') }}</td>
                     <td>{{ \Carbon\Carbon::parse($registration->tanggal_daftar)->format('d-m-Y') }}</td>
                     <td>
                         @if($registration->status == 'menunggu')
-                            <span class="badge badge-warning">🟡 Menunggu</span>
-                        @elseif($registration->status == 'Di konfirmasi')
-                            <span class="badge badge-success">🟢 Di Konfirmasi</span>
-                        @elseif($registration->status == 'Di tolak')
-                            <span class="badge badge-danger">🔴 Di Tolak</span>
+                            <span class="badge badge-warning">Menunggu</span>
+                        @elseif($registration->status == 'dikonfirmasi')
+                            <span class="badge badge-success">Di Konfirmasi</span>
+                        @elseif($registration->status == 'ditolak')
+                            <span class="badge badge-danger">Di Tolak</span>
                         @endif
                     </td>
                     <td>{{ Str::limit($registration->keluhan, 20) }}</td>
@@ -62,25 +62,24 @@
                             <span class="fa fa-search"></span>
                         </a>
 
-                        {{-- TOMBOL TERIMA (Centang) - Hanya tampil jika status menunggu --}}
-                        @if($registration->status == 'menunggu')
-                        <form action="{{ route('admin.registration.approve', encrypt($registration->id)) }}" method="POST" class="d-inline">
-                            @csrf
-                            <button type="submit" class="btn btn-link text-success p-0 mx-2" onclick="return confirm('Konfirmasi pendaftaran ini?')">
-                                <span class="fa fa-check-circle"></span>
-                            </button>
-                        </form>
+                        {{-- TOMBOL TERIMA --}}
+                        @if($registration->status == 'menunggu') 
+                        <form action="{{ route('admin.registration.approve', encrypt($registration->id)) }}" method="POST" class="d-inline form-approve">
+                            @csrf 
+                                <button type="button" class="btn btn-link text-success p-0 mx-2 btn-approve"> 
+                                    <span class="fa fa-check-circle"></span> 
+                                </button> 
+                        </form> 
                         @endif
-
-                        {{-- TOMBOL TOLAK (Silang) - Hanya tampil jika status menunggu --}}
-                        @if($registration->status == 'menunggu')
-                        <form action="{{ route('admin.registration.reject', encrypt($registration->id)) }}" method="POST" class="d-inline">
-                            @csrf
-                            <button type="submit" class="btn btn-link text-danger p-0 mx-2" onclick="return confirm('Tolak pendaftaran ini?')">
-                                <span class="fa fa-times-circle"></span>
-                            </button>
-                        </form>
-                        @endif
+                        {{-- TOMBOL TOLAK --}} 
+                        @if($registration->status == 'menunggu') 
+                        <form action="{{ route('admin.registration.reject', encrypt($registration->id)) }}" method="POST" class="d-inline form-reject"> 
+                            @csrf 
+                            <button type="button" class="btn btn-link text-danger p-0 mx-2 btn-reject"> 
+                                <span class="fa fa-times-circle"></span> 
+                            </button> 
+                        </form> 
+                        @endif 
                     </td>
                 </tr>
                 @endforeach
@@ -89,11 +88,6 @@
         {{ $registrations->links() }}
     </div>
 </div>
-
-{{-- <form action="" id="form-destroy" method="POST">
-    @csrf
-    @method('DELETE')
-</form> --}}
 @endsection
 
 @push('styles')
@@ -104,28 +98,49 @@
 <script src="{{ asset('vendor/datatables/jquery.dataTables.min.js') }}"></script>
 <script src="{{ asset('vendor/datatables/dataTables.bootstrap4.min.js') }}"></script>
 
-<script>
-$(document).ready(function () {
-    $(".datatable").DataTable();
-});
-
-// function handleDestroy(url) {
-//     Swal.fire({
-//         title: "Apakah Anda Yakin?",
-//         text: "Kamu tidak bisa mengembalikan data yang telah dihapus!",
-//         icon: "warning",
-//         showCancelButton: true,
-//         confirmButtonText: "Ya Hapus",
-//         cancelButtonText: "Batal",
-//     }).then((result) => {
-//         if (result.isConfirmed) {
-//             $('#form-destroy').attr('action', url);
-//             $('#form-destroy').submit();
-//         }
-//     });
-// }
+<script> 
+$(document).ready(function () { 
+    // DataTable 
+    $(".datatable").DataTable(); 
+    
+    // SweetAlert KONFIRMASI 
+    $(document).on('click', '.btn-approve', function () {
+        let form = $(this).closest('.form-approve'); 
+        
+        Swal.fire({
+            title: 'Konfirmasi Pendaftaran?', 
+            text: 'Apakah kamu yakin ingin mengkonfirmasi pendaftaran ini?', 
+            icon: 'question', 
+            showCancelButton: true, 
+            cancelButtonText: 'Batal', 
+            confirmButtonText: 'Ya, Konfirmasi', 
+            reverseButtons: true 
+        }).then((result) => {
+            if (result.isConfirmed) {
+                form.submit();
+            } 
+        }); 
+    }); 
+    
+    // SweetAlert TOLAK 
+    $(document).on('click', '.btn-reject', function () {
+        let form = $(this).closest('.form-reject'); 
+        
+        Swal.fire({
+            title: 'Tolak Pendaftaran?', 
+            text: 'Apakah kamu yakin ingin menolak pendaftaran ini?', 
+            icon: 'warning', 
+            showCancelButton: true,  
+            cancelButtonText: 'Batal',
+            confirmButtonText: 'Ya, Tolak', 
+            reverseButtons: true }).then((result) => {
+                if (result.isConfirmed) {
+                    form.submit(); 
+                } 
+            }); 
+        }); 
+    }); 
 </script>
-
 @if (Session::has('success'))
 <script>
 Swal.fire({
@@ -149,4 +164,26 @@ Swal.fire({
 });
 </script>
 @endif
+<script>
+setInterval(function () {
+    fetch(window.location.href)
+        .then(response => response.text())
+        .then(html => {
+            let parser = new DOMParser();
+            let doc = parser.parseFromString(html, 'text/html');
+
+            let newTbody = doc.querySelector('.datatable tbody');
+            let oldTbody = document.querySelector('.datatable tbody');
+
+            if (newTbody && oldTbody && newTbody.innerHTML !== oldTbody.innerHTML) {
+                let table = $('.datatable').DataTable();
+
+                table.clear();
+                table.rows.add($(newTbody).find('tr'));
+                table.draw(false);
+            }
+        })
+        .catch(error => console.error(error));
+}, 3000);
+</script>
 @endpush

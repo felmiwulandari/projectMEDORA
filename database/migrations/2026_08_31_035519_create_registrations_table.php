@@ -16,7 +16,7 @@ return new class extends Migration
         $table->foreignId('patient_id')->constrained('patients')->onDelete('cascade');
         $table->foreignId('schedule_id')->constrained('schedules')->onDelete('cascade');
         $table->date('tanggal_daftar');
-        $table->enum('status', ['menunggu', 'Di konfirmasi', 'Di tolak'])->default('menunggu'); 
+        $table->enum('status', ['menunggu', 'dikonfirmasi', 'ditolak'])->default('menunggu');
         $table->text('keluhan');
         $table->timestamps();
 });

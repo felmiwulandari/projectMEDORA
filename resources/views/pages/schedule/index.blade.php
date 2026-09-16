@@ -35,10 +35,16 @@
                 <tr>
                     <td>{{ $schedule->doctor->name ?? 'Tidak ada' }}</td>
                     <td>{{ $schedule->tanggal }}</td>
-                    <td>{{ $schedule->jam_mulai }}</td>
-                    <td>{{ $schedule->jam_selesai }}</td>
+                    <td>{{ \Carbon\Carbon::parse($schedule->jam_mulai)->format('H:i') }}</td>
+                    <td>{{ \Carbon\Carbon::parse($schedule->jam_selesai)->format('H:i') }}</td>
                     <td>{{ $schedule->kuota }}</td>
-                    <td>{{ $schedule->status }}</td>
+                    <td>
+                        @if($schedule->status == 'Aktif')
+                            <span class="badge badge-success">Aktif</span>
+                        @else
+                            <span class="badge badge-danger">Tidak Aktif</span>
+                        @endif
+                    </td>
                     <td>{{ $schedule->aksi }}</td>
 
                     <td>

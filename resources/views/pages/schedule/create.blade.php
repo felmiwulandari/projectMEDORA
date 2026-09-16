@@ -23,7 +23,7 @@
                         {{-- DOCTOR ID --}}
                         <div class="form-group mb-3">
                             <label for="doctor_id" class="form-label">Dokter <span class="text-danger">*</span></label>
-                            <select name="doctor_id" id="doctor_id" class="form-control @error('doctor_id') is-invalid @enderror" required>
+                            <select name="doctor_id" id="doctor_id" required class="form-control @error('doctor_id') is-invalid @enderror" required>
                                 <option value="">Pilih Dokter</option>
                                 
                                 @foreach($doctors as $doctor)
@@ -87,7 +87,7 @@
 
                           <div class="form-group mb-3">
                             <label for="status" class="form-label">Status <span class="text-danger">*</span></label>
-                            <select name="status" id="status" class="form-control @error('status') is-invalid @enderror" required>
+                            <select name="status" id="status" required class="form-control @error('status') is-invalid @enderror" required>
                                 <option value="aktif" {{ old('status') == 'aktif' ? 'selected' : '' }}>Aktif</option>
                                 <option value="tidak aktif" {{ old('status') == 'tidak aktif' ? 'selected' : '' }}>Tidak Aktif</option>
                             </select>

@@ -29,11 +29,12 @@
             </tr>
             <tr>
                 <th width="200px">Jam Mulai</th>
-                <td>{{ $registration->schedule->jam_mulai ?? '-' }}</td>
+                <td>{{ \Carbon\Carbon::parse($registration->schedule->jam_mulai)->format('H:i') }}</td>
+                
             </tr>
             <tr>
                 <th width="200px">Jam Selesai</th>
-                <td>{{ $registration->schedule->jam_selesai ?? '-' }}</td>
+                <td>{{ \Carbon\Carbon::parse($registration->schedule->jam_selesai)->format('H:i') }}</td>
             </tr>
             <tr>
                 <th width="200px">Keluhan</th>
@@ -43,11 +44,11 @@
                 <th width="200px">Status</th>
                 <td>
                     @if($registration->status == 'menunggu')
-                        <span class="badge badge-warning">🟡 Menunggu</span>
+                        <span class="badge badge-warning">Menunggu</span>
                     @elseif($registration->status == 'Di konfirmasi')
-                        <span class="badge badge-success">🟢 Di konfirmasi</span>
+                        <span class="badge badge-success">Di konfirmasi</span>
                     @elseif($registration->status == 'Di tolak')
-                        <span class="badge badge-danger">🔴 Di tolak</span>
+                        <span class="badge badge-danger">Di tolak</span>
                     @endif
                 </td>
             </tr>

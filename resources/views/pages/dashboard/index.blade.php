@@ -26,7 +26,7 @@
                                 Pendaftaran Menunggu
                             </div>
                             <div class="h5 mb-0 font-weight-bold text-gray-800">
-                                0
+                                {{ $menunggu }}
                             </div>
                         </div>
 
@@ -47,7 +47,7 @@
                                 Pendaftaran Dikonfirmasi
                             </div>
                             <div class="h5 mb-0 font-weight-bold text-gray-800">
-                                0
+                                {{ $dikonfirmasi }}
                             </div>
                         </div>
 
@@ -68,7 +68,7 @@
                                 Total Pasien
                             </div>
                             <div class="h5 mb-0 font-weight-bold text-gray-800">
-                                0
+                                {{ $totalPasien }}
                             </div>
                         </div>
 

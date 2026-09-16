@@ -28,7 +28,7 @@
 
                     <div class="form-group mb-2">
                         <label for="status" class="form-label">Status <span class="text-danger">*</span></label>
-                        <select name="status" id="status" class="form-control @error('status') is-invalid @enderror">
+                        <select name="status" id="status" required class="form-control @error('status') is-invalid @enderror">
                             <option value="">Pilih Status</option>
                             <option value="Aktif" {{ old('status', $specialist->status ?? '') == 'Aktif' ? 'selected' : '' }}>Aktif</option>
                             <option value="Tidak Aktif" {{ old('status', $specialist->status ?? '') == 'Tidak Aktif' ? 'selected' : '' }}>Tidak Aktif</option>
@@ -46,7 +46,5 @@
                 </form>
             </div>
        </div>
-
-       
     </div>
 @endsection

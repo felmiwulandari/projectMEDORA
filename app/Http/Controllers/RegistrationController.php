@@ -16,8 +16,7 @@ class RegistrationController extends Controller
     {
         $registrations = Registration::with([
             'patient',
-            'schedule.doctor',      // Ambil dokter lewat schedule
-            'schedule.specialist'    // Ambil specialist lewat schedule
+            'schedule.doctor.specialist',      // Ambil dokter lewat schedule
         ])
         ->orderBy('created_at', 'desc')
         ->paginate(10);
@@ -37,39 +36,76 @@ class RegistrationController extends Controller
      * Store a newly created resource in storage.
      */
     public function store(Request $request)
-    {
-         $request->validate([
-            'name' => 'required',
-            'nik' => 'required|unique:patients,nik',
-            'tanggal_lahir' => 'required|date',
-            'jenis_kelamin' => 'required',
-            'no_hp' => 'required',
-            'alamat' => 'required',
-            'schedule_id' => 'required|exists:schedules,id',
-            'keluhan' => 'required',
+{
+    $request->validate([
+        'name' => 'required',
+        'nik' => 'required',
+        'tanggal_lahir' => 'required|date',
+        'jenis_kelamin' => 'required',
+        'no_hp' => 'required',
+        'alamat' => 'required',
+        'schedule_id' => 'required|exists:schedules,id',
+        'keluhan' => 'required',
+    ], [
+        'name.required' => 'Nama harus diisi',
+        'nik.required' => 'NIK harus diisi',
+        'tanggal_lahir.required' => 'Tanggal lahir harus diisi',
+        'tanggal_lahir.date' => 'Tanggal lahir harus berupa tanggal yang valid',
+        'jenis_kelamin.required' => 'Jenis kelamin harus dipilih',
+        'no_hp.required' => 'Nomor HP harus diisi',
+        'alamat.required' => 'Alamat harus diisi',
+        'schedule_id.required' => 'Jadwal harus dipilih',
+        'schedule_id.exists' => 'Jadwal tidak ditemukan',
+        'keluhan.required' => 'Keluhan harus diisi',
+    ]);
+
+   $registration = DB::transaction(function () use ($request) {
+
+    $patient = Patient::firstOrCreate(
+        ['nik' => $request->nik],
+        [
+            'name' => $request->name,
+            'tanggal_lahir' => $request->tanggal_lahir,
+            'jenis_kelamin' => $request->jenis_kelamin,
+            'no_hp' => $request->no_hp,
+            'alamat' => $request->alamat,
+        ]
+    );
+
+    return Registration::create([
+        'patient_id' => $patient->id,
+        'schedule_id' => $request->schedule_id,
+        'tanggal_daftar' => now()->toDateString(),
+        'keluhan' => $request->keluhan,
+        'status' => 'menunggu',
         ]);
+    });
 
-        DB::transaction(function () use ($request) {
+    return response()->json([
+    'success' => true,
+    'message' => 'Pendaftaran berhasil',
+    'redirect' => route('registration.status', encrypt($registration->id))
+        ]);
+}
 
-            $patient = Patient::create([
-                'name' => $request->name,
-                'nik' => $request->nik,
-                'tanggal_lahir' => $request->tanggal_lahir,
-                'jenis_kelamin' => $request->jenis_kelamin,
-                'no_hp' => $request->no_hp,
-                'alamat' => $request->alamat,
-            ]);
+   public function status(string $id)
+{
+    $registration = Registration::with([
+        'patient',
+        'schedule.doctor'
+    ])->findOrFail(decrypt($id));
 
-            Registration::create([
-                'patient_id' => $patient->id,
-                'schedule_id' => $request->schedule_id,
-                'tanggal_daftar' => now()->toDateString(),
-                'keluhan' => $request->keluhan,
-                'status' => 'menunggu',
-            ]);
-        });
-    }
+    return view('pages.registration.status', compact('registration'));
+}
 
+public function checkStatus(string $id)
+{
+    $registration = Registration::findOrFail(decrypt($id));
+
+    return response()->json([
+        'status' => $registration->status
+    ]);
+}
 
     /**
      * Display the specified resource.
@@ -78,8 +114,7 @@ class RegistrationController extends Controller
     {
         $registration = Registration::with([
             'patient',
-            'schedule.doctor',      // Ambil dokter lewat schedule
-            'schedule.specialist'    // Ambil specialist lewat schedule'
+            'schedule.doctor.specialist',      // Ambil dokter lewat schedule
         ])->findOrFail(decrypt($id));
 
         return view('pages.registration.show', compact('registration'));
@@ -132,7 +167,7 @@ class RegistrationController extends Controller
 
         // Ubah status menjadi Di konfirmasi
         $registration->update([
-            'status' => 'Di konfirmasi'
+            'status' => 'dikonfirmasi'
         ]);
 
         // Kurangi kuota jadwal
@@ -157,7 +192,7 @@ class RegistrationController extends Controller
 
         // Ubah status menjadi Di tolak
         $registration->update([
-            'status' => 'Di tolak'
+            'status' => 'ditolak'
         ]);
 
         return redirect()

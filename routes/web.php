@@ -18,6 +18,22 @@ Route::get('/', function () {
     Route::post('/registration', [RegistrationController::class, 'store'])
     ->name('registration.store');
 
+//Route for Doctor page
+    Route::get('/get-doctors/{specialist_id}', [ScheduleController::class, 'getDoctorsBySpecialist'])
+    ->name('get.doctors');
+
+//Route for Schedule page
+    Route::get('/get-schedules/{doctor_id}', [ScheduleController::class, 'getSchedulesByDoctor'])
+    ->name('get.schedules');
+
+// Route untuk Status Pendaftaran
+    Route::get('/registration/status/{id}', [RegistrationController::class, 'status'])
+    ->name('registration.status');
+
+// Route untuk Status Pendaftaran
+    Route::get('/registration/status/{id}/check', [RegistrationController::class, 'checkStatus'])
+    ->name('registration.status.check');
+
 
 Auth::routes([
     'register' => false,

@@ -24,7 +24,7 @@
 
                     <div class="form-group mb-2">
                         <label for="specialist_id" class="form-label">Specialist <span class="text-danger">*</span></label>
-                        <select name="specialist_id" id="specialist_id" class="form-control @error('specialist_id') is-invalid @enderror">
+                        <select name="specialist_id" id="specialist_id" required class="form-control @error('specialist_id') is-invalid @enderror">
                             <option value="">Pilih Specialist</option>
                             @foreach($specialists as $specialist)
                                 <option value="{{ $specialist->id }}" {{ old('specialist_id', $specialist->id ?? '') == $specialist->id ? 'selected' : '' }}>
@@ -41,7 +41,7 @@
 
                     <div class="form-group mb-2">
                         <label for="status" class="form-label">Status <span class="text-danger">*</span></label>
-                        <select name="status" id="status" class="form-control @error('status') is-invalid @enderror">
+                        <select name="status" id="status" required class="form-control @error('status') is-invalid @enderror">
                             <option value="">Pilih Status</option>
                             <option value="Aktif" {{ old('status', $doctor->status ?? '') == 'Aktif' ? 'selected' : '' }}>Aktif</option>
                             <option value="Tidak Aktif" {{ old('status', $doctor->status ?? '') == 'Tidak Aktif' ? 'selected' : '' }}>Tidak Aktif</option>

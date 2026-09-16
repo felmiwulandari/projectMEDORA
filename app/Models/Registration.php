@@ -34,9 +34,9 @@ class Registration extends Model
     public function getStatusLabelAttribute()
     {
         return match($this->status) {
-            'menunggu' => '🟡 Menunggu',
-            'diterima' => '🟢 Di Konfirmasi',
-            'ditutup' => '🔴 Di Tolak',
+            'menunggu' => 'Menunggu',
+            'diterima' => 'Di Konfirmasi',
+            'ditutup' => 'Di Tolak',
             default => $this->status
         };
 
