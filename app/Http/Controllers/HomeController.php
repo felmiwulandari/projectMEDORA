@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
 use App\Models\Patient;
 use App\Models\Registration;
 
@@ -14,23 +13,28 @@ class HomeController extends Controller
     }
 
     public function index()
-    {
-        $menunggu = Registration::whereDate('tanggal_daftar', today())
-            ->where('status', 'menunggu')
-            ->count();
+{
+    // Pasien hari ini yang sudah dikonfirmasi
+    $totalPasien = Registration::whereDate('tanggal_daftar', today())
+        ->where('status', 'dikonfirmasi')
+        ->distinct()
+        ->count('patient_id');
 
-        $dikonfirmasi = Registration::whereDate('tanggal_daftar', today())
-            ->where('status', 'dikonfirmasi')
-            ->count();
+    // Semua pendaftaran hari ini
+    $pendaftaranHariIni = Registration::whereDate(
+        'tanggal_daftar',
+        today()
+    )->count();
 
-        $totalPasien = Registration::whereDate('tanggal_daftar', today())
-            ->distinct()
-            ->count('patient_id');
+    // Pendaftaran hari ini yang masih menunggu
+    $menunggu = Registration::whereDate('tanggal_daftar', today())
+        ->where('status', 'menunggu')
+        ->count();
 
-        return view('pages.dashboard.index', compact(
-        'menunggu',
-        'dikonfirmasi',
-        'totalPasien'
-    ));
+    return view('home', compact(
+        'totalPasien',
+        'pendaftaranHariIni',
+        'menunggu'
+        ));
     }
 }

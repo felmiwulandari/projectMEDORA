@@ -356,6 +356,31 @@ document.getElementById('doctor_id').addEventListener('change', function () {
             '<option value="">PILIH JADWAL</option>';
     }
 });
+
+// SUBMIT PENDAFTARAN
+document.getElementById('patientForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+
+    let form = this;
+
+    fetch(form.action, {
+        method: 'POST',
+        body: new FormData(form),
+        headers: {
+            'X-CSRF-TOKEN': document.querySelector('input[name="_token"]').value,
+            'Accept': 'application/json'
+        }
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            window.location.href = data.redirect;
+        }
+    })
+    .catch(error => {
+        console.error(error);
+    });
+});
 </script>
 
 @endsection

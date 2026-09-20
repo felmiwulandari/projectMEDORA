@@ -197,7 +197,7 @@ class ScheduleController extends Controller
     public function getDoctorsBySpecialist($specialist_id)
     {
         $doctors = Doctor::where('specialist_id', $specialist_id)
-            ->where('status', 'Aktif')
+            ->where('status', 'aktif')
             ->get();
 
         return response()->json($doctors);

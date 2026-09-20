@@ -169,21 +169,25 @@ setInterval(function () {
     fetch(window.location.href)
         .then(response => response.text())
         .then(html => {
+
             let parser = new DOMParser();
             let doc = parser.parseFromString(html, 'text/html');
 
             let newTbody = doc.querySelector('.datatable tbody');
-            let oldTbody = document.querySelector('.datatable tbody');
 
-            if (newTbody && oldTbody && newTbody.innerHTML !== oldTbody.innerHTML) {
+            if (newTbody) {
                 let table = $('.datatable').DataTable();
 
                 table.clear();
                 table.rows.add($(newTbody).find('tr'));
                 table.draw(false);
             }
+
         })
-        .catch(error => console.error(error));
+        .catch(error => {
+            console.error('Gagal memperbarui data:', error);
+        });
+
 }, 3000);
 </script>
 @endpush
