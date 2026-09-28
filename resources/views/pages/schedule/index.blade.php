@@ -45,7 +45,6 @@
                             <span class="badge badge-danger">Tidak Aktif</span>
                         @endif
                     </td>
-                    <td>{{ $schedule->aksi }}</td>
 
                     <td>
                         <a href="{{ route('admin.schedule.show', encrypt($schedule->id)) }}" class="btn btn-link text-secondary p-0 mx-2">

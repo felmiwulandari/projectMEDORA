@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Admin page')
+@section('title', 'Patient page')
 
 @section('content')
     <div class="d-sm-flex align-items-center justify-content-between mb-4">
