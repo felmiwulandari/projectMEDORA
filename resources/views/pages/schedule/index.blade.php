@@ -21,9 +21,9 @@
             <thead>
                 <tr>
                     <th>Dokter</th>
-                    <th>Tanggal</th>
-                    <th>Jam Mulai</th>
-                    <th>Jam Selesai</th>
+                    <th>Minggu</th>
+                    <th>Hari Praktik</th>
+                    <th>Jam Praktik</th>
                     <th>Kuota</th>
                     <th>Status</th>
                     <th>Aksi</th>
@@ -31,35 +31,94 @@
             </thead>
 
             <tbody>
-                @foreach ($schedules as $schedule)
-                <tr>
-                    <td>{{ $schedule->doctor->name ?? 'Tidak ada' }}</td>
-                    <td>{{ $schedule->tanggal }}</td>
-                    <td>{{ \Carbon\Carbon::parse($schedule->jam_mulai)->format('H:i') }}</td>
-                    <td>{{ \Carbon\Carbon::parse($schedule->jam_selesai)->format('H:i') }}</td>
-                    <td>{{ $schedule->kuota }}</td>
-                    <td>
-                        @if($schedule->status == 'aktif')
-                            <span class="badge badge-success">Aktif</span>
-                        @else
-                            <span class="badge badge-danger">Tidak Aktif</span>
-                        @endif
-                    </td>
+                @php
+                    $groupedSchedules = $schedules->groupBy(function ($schedule) {
+                        return $schedule->doctor_id . '-' .
+                            \Carbon\Carbon::parse($schedule->tanggal)
+                                ->startOfWeek(\Carbon\Carbon::MONDAY)
+                                ->format('Y-m-d');
+                    });
+                @endphp
 
-                    <td>
-                        <a href="{{ route('admin.schedule.show', encrypt($schedule->id)) }}" class="btn btn-link text-secondary p-0 mx-2">
-                            <span class="fa fa-search"></span>
-                        </a>
+                @foreach ($groupedSchedules as $group)
+                    @php
+                        $first = $group->first();
 
-                        <a href="{{ route('admin.schedule.edit', encrypt($schedule->id)) }}" class="btn btn-link p-0 mx-2">
-                            <span class="fa fa-edit"></span>
-                        </a>
+                        $startWeek = \Carbon\Carbon::parse($first->tanggal)
+                            ->startOfWeek(\Carbon\Carbon::MONDAY);
 
-                        <a href="javascript:void(0)" onclick="handleDestroy('{{ route('admin.schedule.destroy', encrypt($schedule->id)) }}')" class="btn btn-link text-danger p-0 mx-2">
-                            <span class="fa fa-trash"></span>
-                        </a>
-                    </td>
-                </tr>
+                        $endWeek = $startWeek->copy()->addDays(6);
+                    @endphp
+
+                    <tr>
+                        {{-- DOKTER --}}
+                        <td>
+                            {{ $first->doctor->name ?? 'Tidak ada' }}
+                        </td>
+
+                        {{-- MINGGU --}}
+                        <td>
+                            {{ $startWeek->format('d-m-Y') }}
+                            <br>
+                            -
+                            <br>
+                            {{ $endWeek->format('d-m-Y') }}
+                        </td>
+
+                        {{-- HARI PRAKTIK --}}
+                        <td>
+                            @foreach ($group->sortBy('tanggal') as $schedule)
+                                {{ \Carbon\Carbon::parse($schedule->tanggal)->locale('id')->translatedFormat('l') }}
+                                <br>
+                            @endforeach
+                        </td>
+
+                        {{-- JAM PRAKTIK --}}
+                        <td>
+                            @foreach ($group->sortBy('tanggal') as $schedule)
+                                {{ \Carbon\Carbon::parse($schedule->jam_mulai)->format('H:i') }}
+                                -
+                                {{ \Carbon\Carbon::parse($schedule->jam_selesai)->format('H:i') }}
+                                <br>
+                            @endforeach
+                        </td>
+
+                        {{-- KUOTA --}}
+                        <td>
+                            @foreach ($group->sortBy('tanggal') as $schedule)
+                                {{ $schedule->kuota }}
+                                <br>
+                            @endforeach
+                        </td>
+
+                        {{-- STATUS --}}
+                        <td>
+                            @if($first->status == 'aktif')
+                                <span class="badge badge-success">Aktif</span>
+                            @else
+                                <span class="badge badge-danger">Tidak Aktif</span>
+                            @endif
+                        </td>
+
+                        {{-- AKSI --}}
+                        <td>
+                            <a href="{{ route('admin.schedule.show', encrypt($first->id)) }}"
+                            class="btn btn-link text-secondary p-0 mx-2">
+                                <span class="fa fa-search"></span>
+                            </a>
+
+                            <a href="{{ route('admin.schedule.edit', encrypt($first->id)) }}"
+                            class="btn btn-link p-0 mx-2">
+                                <span class="fa fa-edit"></span>
+                            </a>
+
+                            <a href="javascript:void(0)"
+                            onclick="handleDestroy('{{ route('admin.schedule.destroy', encrypt($first->id)) }}')"
+                            class="btn btn-link text-danger p-0 mx-2">
+                                <span class="fa fa-trash"></span>
+                            </a>
+                        </td>
+                    </tr>
                 @endforeach
             </tbody>
         </table>
@@ -110,6 +169,17 @@ Swal.fire({
     icon: "success",
     timer: 2000,
     showConfirmButton: false,
+});
+</script>
+@endif
+
+@if (Session::has('error'))
+<script>
+Swal.fire({
+    title: "Tidak dapat dihapus!",
+    text: "{{ Session::get('error') }}",
+    icon: "error",
+    showConfirmButton: true,
 });
 </script>
 @endif

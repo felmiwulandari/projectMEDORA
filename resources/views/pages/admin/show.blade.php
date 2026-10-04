@@ -42,6 +42,10 @@
             </div>
     </div>
     
+    <form action="" id="form-destroy" method="POST">
+        @csrf
+        @method('DELETE')
+    </form>
 @endsection
 
 @push('styles')

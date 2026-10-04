@@ -44,12 +44,12 @@
         </table>
         
         <div class="d-flex align-items-center gap-2">
-            <a href="{{ route('admin.doctor.index') }}" class="btn btn-primary">Kembali</a>
-            <a href="{{ route('admin.doctor.edit', encrypt($doctor->id)) }}" class="btn btn-warning">
-                <span class="fa fa-edit"></span> Edit
+            <a href="{{ route('admin.doctor.index') }}" class="btn btn-primary mr-2">
+                Kembali
             </a>
-            <a href="javascript:void(0)" onclick="handleDestroy('{{ route('admin.doctor.destroy', encrypt($doctor->id)) }}')" class="btn btn-danger">
-                <span class="fa fa-trash"></span> Hapus
+            <a href="{{ route('admin.doctor.edit', encrypt($doctor->id)) }}" class="btn btn-secondary mr-2">Edit</a>
+            <a href="javascript:void()" onclick="handleDestroy('{{ route('admin.doctor.destroy', encrypt($doctor->id)) }}')"
+                class="btn btn-danger mr-2">Hapus
             </a>
         </div>
     </div>

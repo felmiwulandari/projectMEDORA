@@ -20,6 +20,16 @@
 
                     <div class="card-body">
 
+                        @if ($errors->any())
+                            <div class="alert alert-danger">
+                                <ul class="mb-0">
+                                    @foreach ($errors->all() as $error)
+                                        <li>{{ $error }}</li>
+                                    @endforeach
+                                </ul>
+                            </div>
+                        @endif
+
                         {{-- DOCTOR ID --}}
                         <div class="form-group mb-3">
                             <label for="doctor_id" class="form-label">Dokter <span class="text-danger">*</span></label>
@@ -39,8 +49,12 @@
                         </div>
 
                         <div class="form-group mb-3">
-                            <label for="tanggal" class="form-label">Tanggal</label>
-                            <input type="date" name="tanggal" id="tanggal" value="{{ old('tanggal') }}" class="form-control @error('tanggal') is-invalid @enderror">
+                            <label for="tanggal" class="form-label">Tanggal Mulai Minggu <span class="text-danger">*</span></label>
+                            <input type="date" name="tanggal" id="tanggal" value="{{ old('tanggal') }}" class="form-control @error('tanggal') is-invalid @enderror" required>
+
+                            <small class="text-muted">
+                                Pilih tanggal hari Senin sebagai awal minggu.
+                            </small>
 
                             @error('tanggal')
                                 <div class="invalid-feedback d-block">
@@ -50,44 +64,89 @@
                         </div>
 
 
+                        {{-- HARI PRAKTIK --}}
                         <div class="form-group mb-3">
-                            <label for="jam_mulai" class="form-label">Jam Mulai</label>
-                            <input type="time" name="jam_mulai" id="jam_mulai" value="{{ old('jam_mulai') }}" class="form-control @error('jam_mulai') is-invalid @enderror">
+                            <label class="form-label">
+                                Hari Praktik <span class="text-danger">*</span>
+                            </label>
 
-                            @error('jam_mulai')
-                                <div class="invalid-feedback d-block">
-                                    <span>{{ $message }}</span>
+                            @error('hari')
+                                <div class="text-danger mb-2">
+                                    {{ $message }}
                                 </div>
                             @enderror
-                        </div>
 
+                            @php
+                                $days = [
+                                    'senin' => 'Senin',
+                                    'selasa' => 'Selasa',
+                                    'rabu' => 'Rabu',
+                                    'kamis' => 'Kamis',
+                                    'jumat' => 'Jumat',
+                                    'sabtu' => 'Sabtu',
+                                    'minggu' => 'Minggu',
+                                ];
+                            @endphp
+
+                            @foreach($days as $key => $day)
+
+                        <div class="border rounded p-2 mb-2">
+
+                            <div class="form-check">
+                                <input type="checkbox"
+                                    class="form-check-input day-checkbox"
+                                    name="hari[]"
+                                    value="{{ $key }}"
+                                    id="{{ $key }}"
+                                    {{ in_array($key, old('hari', [])) ? 'checked' : '' }}>
+
+                                <label class="form-check-label" for="{{ $key }}">
+                                    {{ $day }}
+                                </label>
+                            </div>
+
+                            <div class="day-detail mt-2"
+                                id="detail-{{ $key }}"
+                                style="display: none;">
+
+                                <div class="row">
+
+                                    <div class="col-md-4">
+                                        <label class="form-label">Jam Mulai</label>
+
+                                        <input type="time"
+                                            name="jam_mulai[{{ $key }}]"
+                                            class="form-control">
+                                    </div>
+
+                                    <div class="col-md-4">
+                                        <label class="form-label">Jam Selesai</label>
+
+                                        <input type="time"
+                                                name="jam_selesai[{{ $key }}]"
+                                                class="form-control">
+                                    </div>
+
+                                    <div class="col-md-4">
+                                        <label class="form-label">Kuota</label>
+
+                                        <input type="number"
+                                            name="kuota[{{ $key }}]"
+                                            class="form-control"
+                                            min="1"
+                                            max="100">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            @endforeach
+                        </div>
 
                         <div class="form-group mb-3">
-                            <label for="jam_selesai" class="form-label">Jam Selesai</label>
-                            <input type="time" name="jam_selesai" id="jam_selesai" value="{{ old('jam_selesai') }}" class="form-control @error('jam_selesai') is-invalid @enderror">
-
-                            @error('jam_selesai')
-                                <div class="invalid-feedback d-block">
-                                    <span>{{ $message }}</span>
-                                </div>
-                            @enderror
-                        </div>
-
-
-                        <div class="form-group mb-3">
-                            <label for="kuota" class="form-label">Kuota</label>
-                            <input type="number" name="kuota" id="kuota" value="{{ old('kuota') }}" class="form-control @error('kuota') is-invalid @enderror">
-
-                            @error('kuota')
-                                <div class="invalid-feedback d-block">
-                                    <span>{{ $message }}</span>
-                                </div>
-                            @enderror
-                        </div>
-
-                          <div class="form-group mb-3">
                             <label for="status" class="form-label">Status <span class="text-danger">*</span></label>
                             <select name="status" id="status" required class="form-control @error('status') is-invalid @enderror" required>
+                                <option value="">Pilih Status</option>
+
                                 <option value="aktif" {{ old('status') == 'aktif' ? 'selected' : '' }}>Aktif</option>
                                 <option value="tidak aktif" {{ old('status') == 'tidak aktif' ? 'selected' : '' }}>Tidak Aktif</option>
                             </select>
@@ -107,9 +166,27 @@
                             <span class="fa fa-times-circle"></span> Cancel
                         </a>
                     </div>
-
                 </form>
             </div>
         </div>
     </div>
+
+<script>
+    document.querySelectorAll('.day-checkbox').forEach(function (checkbox) {
+
+        checkbox.addEventListener('change', function () {
+
+            let detail = document.getElementById('detail-' + this.value);
+
+            if (this.checked) {
+                detail.style.display = 'block';
+            } else {
+                detail.style.display = 'none';
+            }
+
+        });
+
+    });
+</script>
+
 @endsection
