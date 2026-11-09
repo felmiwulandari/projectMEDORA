@@ -41,10 +41,6 @@
                 <a href="{{ route('admin.specialist.index') }}" class="btn btn-primary mr-2">
                     Kembali
                 </a>
-                <a href="{{ route('admin.specialist.edit', encrypt($specialists->id)) }}" class="btn btn-secondary mr-2">Edit</a>
-                <a href="javascript:void()" onclick="handleDestroy('{{ route('admin.specialist.destroy', encrypt($specialists->id)) }}')"
-                    class="btn btn-danger mr-2">Hapus
-                </a>
             </div>
     </div>
     

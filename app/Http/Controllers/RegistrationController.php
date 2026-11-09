@@ -84,7 +84,7 @@ class RegistrationController extends Controller
     return response()->json([
     'success' => true,
     'message' => 'Pendaftaran berhasil',
-    'redirect' => route('registration.status', encrypt($registration->id))
+    'redirect' => route('registration.success')
         ]);
 }
 
@@ -105,6 +105,42 @@ public function checkStatus(string $id)
     return response()->json([
         'status' => $registration->status
     ]);
+}
+
+public function formCheckStatus()
+{
+    return view('pages.registration.cekstatus');
+}
+
+public function searchStatus(Request $request)
+{
+    $request->validate([
+        'nik' => 'required',
+    ], [
+        'nik.required' => 'NIK harus diisi!',
+    ]);
+
+    $patient = Patient::where('nik', $request->nik)->first();
+
+    if (!$patient) {
+        return back()
+            ->withErrors(['nik' => 'NIK tidak ditemukan!'])
+            ->withInput();
+    }
+
+    $registrations = Registration::with([
+        'patient',
+        'schedule.doctor.specialist',
+    ])
+    ->where('patient_id', $patient->id)
+    ->orderByDesc('tanggal_daftar')
+    ->orderByDesc('created_at')
+    ->get();
+
+    return view('pages.registration.hasilcekstatus', compact(
+        'patient',
+        'registrations'
+    ));
 }
 
     /**

@@ -8,8 +8,13 @@
     @if($registration->status == 'menunggu')
 
         <div class="card shadow text-center" style="width: 245px;">
-            <div class="card-body py-4">
-
+            <div class="card-body py-4 position-relative">
+                <a href="#"
+                onclick="history.back(); return false;"
+                class="text-secondary position-absolute"
+                style="top: 10px; left: 12px; font-size: 20px;">
+                    <i class="fas fa-chevron-left"></i>
+                </a>
                 <div class="mx-auto mb-3 border border-warning rounded-circle
                             d-flex align-items-center justify-content-center text-warning"
                      style="width: 50px; height: 50px; font-size: 25px;">
@@ -103,14 +108,17 @@
                         </div>
                     </div>
 
-                    {{-- TANGGAL PERTEMUAN --}}
-                    <div class="row text-left mb-2"
-                         style="color: #212529;">
+                    {{-- TANGGAL DAN JAM PERTEMUAN --}}
+                    <div class="row text-left mb-2" style="color: #212529;">
                         <div class="col-6">
-                            Tanggal Pertemuan
+                            Jadwal Praktik
                         </div>
                         <div class="col-6">
                             {{ \Carbon\Carbon::parse($registration->schedule->tanggal)->format('d-m-Y') }}
+                            <br>
+                            {{ \Carbon\Carbon::parse($registration->schedule->jam_mulai)->format('H:i') }}
+                            -
+                            {{ \Carbon\Carbon::parse($registration->schedule->jam_selesai)->format('H:i') }}
                         </div>
                     </div>
 
@@ -146,11 +154,11 @@
                         Cetak Ringkasan
                     </button>
 
-                    {{-- KEMBALI KE BERANDA --}}
-                    <a href="{{ url('/') }}"
-                       class="btn btn-secondary btn-block font-weight-bold mb-0"
-                       style="height: 30px; padding: 2px;">
-                        Kembali Ke Beranda
+                    {{-- KEMBALI KE HASIL CEK STATUS --}}
+                    <a href="{{ route('registration.check') }}"
+                    class="btn btn-secondary btn-block font-weight-bold mb-0"
+                    style="height: 30px; padding: 2px;">
+                        Kembali
                     </a>
 
                 </div>
@@ -164,7 +172,13 @@
     @elseif($registration->status == 'ditolak')
 
         <div class="card shadow text-center" style="width: 245px;">
-            <div class="card-body py-4">
+            <div class="card-body py-4 position-relative">
+                <a href="#"
+                onclick="history.back(); return false;"
+                class="text-secondary position-absolute"
+                style="top: 10px; left: 12px; font-size: 20px;">
+                    <i class="fas fa-chevron-left"></i>
+                </a>
 
                 <div class="mx-auto mb-3 border border-danger rounded-circle
                             d-flex align-items-center justify-content-center text-danger"

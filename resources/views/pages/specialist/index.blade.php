@@ -17,41 +17,47 @@
         </div>
 
         <div class="card-body">
-            <table class="table table-striped table-hover datatable">
-                <thead>
-                    <tr>
-                        <th>Name Specialist</th>
-                        <th>Status</th>
-                        <th>Aksi</th>
-                    </tr>
-                </thead>
+            <div class="table-responsive">
+                <table class="table table-striped table-hover datatable">
+                    <thead>
+                        <tr>
+                            <th>Name Specialist</th>
+                            <th>Status</th>
+                            <th>Aksi</th>
+                        </tr>
+                    </thead>
 
-                <tbody>
-                    @foreach ($specialists as $specialist)
-                    <tr>
-                        <td>{{ $specialist->name }}</td>
-                        <td>
-                            @if($specialist->status == 'Aktif')
-                                <span class="badge badge-success">Aktif</span>
-                            @else
-                                <span class="badge badge-danger">Tidak Aktif</span>
-                            @endif
-                        </td>
-                        <td>
-                            <a href="{{ route('admin.specialist.show', encrypt($specialist->id)) }}" class="btn btn-link text-secondary p-0 mx-2">
-                                <span class="fa fa-search"></span>
-                            </a>
-                            <a href="{{ route('admin.specialist.edit', encrypt($specialist->id)) }}" class="btn btn-link p-0 mx-2">
-                                <span class="fa fa-edit"></span>
-                            </a>
-                            <a href="javascript:void(0)" onclick="handleDestroy('{{ route('admin.specialist.destroy', encrypt($specialist->id)) }}')" class="btn btn-link text-danger p-0 mx-2">
-                                <span class="fa fa-trash"></span>
-                            </a>
-                        </td>
-                    </tr>
-                    @endforeach
-                </tbody>
-            </table>
+                    <tbody>
+                        @foreach ($specialists as $specialist)
+                            <tr>
+                                <td>{{ $specialist->name }}</td>
+                                <td>
+                                    @if ($specialist->status == 'Aktif')
+                                        <span class="badge badge-success">Aktif</span>
+                                    @else
+                                        <span class="badge badge-danger">Tidak Aktif</span>
+                                    @endif
+                                </td>
+                                <td class="text-nowrap">
+                                    <a href="{{ route('admin.specialist.show', encrypt($specialist->id)) }}"
+                                        class="btn btn-link text-secondary p-0 mx-2">
+                                        <span class="fa fa-search"></span>
+                                    </a>
+                                    <a href="{{ route('admin.specialist.edit', encrypt($specialist->id)) }}"
+                                        class="btn btn-link p-0 mx-2">
+                                        <span class="fa fa-edit"></span>
+                                    </a>
+                                    <a href="javascript:void(0)"
+                                        onclick="handleDestroy('{{ route('admin.specialist.destroy', encrypt($specialist->id)) }}')"
+                                        class="btn btn-link text-danger p-0 mx-2">
+                                        <span class="fa fa-trash"></span>
+                                    </a>
+                                </td>
+                            </tr>
+                        @endforeach
+                    </tbody>
+                </table>
+            </div>
         </div>
     </div>
     <form action="" id="form-destroy" method="POST">
@@ -61,41 +67,69 @@
 @endsection
 
 @push('styles')
-<link rel="stylesheet" href="{{ asset('vendor/datatables/dataTables.bootstrap4.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('vendor/datatables/dataTables.bootstrap4.min.css') }}">
+
+    <style>
+        @media (max-width: 767px) {
+            .dataTables_wrapper .row:first-child {
+                display: flex;
+                align-items: center;
+                flex-wrap: nowrap;
+            }
+
+            .dataTables_wrapper .dataTables_length,
+            .dataTables_wrapper .dataTables_filter {
+                width: 50%;
+                text-align: left;
+                padding: 0 5px;
+            }
+
+            .dataTables_wrapper .dataTables_filter input {
+                width: 90px;
+            }
+        }
+    </style>
 @endpush
 
-@push('scripts') 
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-<script type="text/javascript" src="{{ asset('vendor/datatables/jquery.dataTables.min.js') }}"></script>
-<script type="text/javascript" src="{{ asset('vendor/datatables/dataTables.bootstrap4.min.js') }}"></script>
-<script type="text/javascript">
-    $('.datatable').dataTable();
-    
-    function handleDestroy(url) {
-        Swal.fire({
-            title: "Apakah Anda yakin?",
-            text: "Kamu tidak bisa mengembalikan data yang telah di hapus!",
-            icon: "warning",
-            showCancelButton: true,
-            confirmButtonText: "Ya Hapus",
-            cancelButtonText: "Batal",
-        }).then((result) => {
-            if (result.isConfirmed) {
-                $('#form-destroy').attr('action', url);
-                $('#form-destroy').submit(); 
-            }
+
+@push('scripts')
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="{{ asset('vendor/datatables/jquery.dataTables.min.js') }}"></script>
+    <script src="{{ asset('vendor/datatables/dataTables.bootstrap4.min.js') }}"></script>
+
+    <script>
+        $(document).ready(function () {
+            $('.datatable').DataTable();
         });
-    }
-</script>
-@if (Session::has('success'))
-<script>
-    Swal.fire({
-        title: "Berhasil!",
-        text: "{{ Session::get('success') }}",
-        icon: "success",
-        timer: "2000",
-        showConfirmButton: false
-    });
-</script>
-@endif
+
+        function handleDestroy(url) {
+            Swal.fire({
+                title: "Apakah Anda yakin?",
+                text: "Kamu tidak bisa mengembalikan data yang telah dihapus!",
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonText: "Ya Hapus",
+                cancelButtonText: "Batal",
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    let form = $('#form-destroy');
+
+                    form.attr('action', url);
+                    form.trigger('submit');
+                }
+            });
+        }
+    </script>
+
+    @if (Session::has('success'))
+        <script>
+            Swal.fire({
+                title: "Berhasil!",
+                text: "{{ Session::get('success') }}",
+                icon: "success",
+                timer: 2000,
+                showConfirmButton: false
+            });
+        </script>
+    @endif
 @endpush

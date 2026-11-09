@@ -3,7 +3,7 @@
 @section('content')
 
 <div class="container min-vh-100 d-flex align-items-center justify-content-center">
-    <form id="patientForm" class="w-100" action="{{ route('registration.store') }}" method="POST">
+    <form id="patientForm" class="w-100" action="{{ route('registration.store') }}" method="POST" novalidate>
         @csrf
 
         @if(session('success'))
@@ -203,19 +203,57 @@
                 </div>
             </div>
         </div>
-
+        {{-- CEK STATUS --}}
+        <div class="text-center mt-3" id="checkStatusButton">
+            <small class="text-warning">Sudah pernah mendaftar?</small>
+            <a href="{{ route('registration.check.form') }}"
+            class="font-weight-bold text-decoration-none"
+            style="color: #f6f8fa;">
+                Cek Status
+            </a>
+        </div>
     </form>
 </div>
 
 <script>
     function showStep2() {
+        let fields = [
+            'name',
+            'nik',
+            'tanggal_lahir',
+            'jenis_kelamin',
+            'no_hp',
+            'alamat'
+        ];
+
+        let valid = true;
+
+        fields.forEach(function(id) {
+            let input = document.getElementById(id);
+
+            if (!input.value.trim()) {
+                input.classList.add('is-invalid');
+                valid = false;
+            } else {
+                input.classList.remove('is-invalid');
+            }
+        });
+
+        if (!valid) {
+            alert('Harap lengkapi semua data pasien terlebih dahulu!');
+            return;
+        }
+
         document.getElementById('step1').classList.add('d-none');
         document.getElementById('step2').classList.remove('d-none');
+        document.getElementById('checkStatusButton').classList.add('d-none');
     }
+
 
     function showStep1() {
         document.getElementById('step2').classList.add('d-none');
         document.getElementById('step1').classList.remove('d-none');
+        document.getElementById('checkStatusButton').classList.remove('d-none');
     }
 
     // DOKTER BERDASARKAN SPESIALIS
@@ -357,9 +395,41 @@ document.getElementById('doctor_id').addEventListener('change', function () {
     }
 });
 
+
 // SUBMIT PENDAFTARAN
 document.getElementById('patientForm').addEventListener('submit', function(e) {
     e.preventDefault();
+
+    let fields = [
+        'name',
+        'nik',
+        'tanggal_lahir',
+        'jenis_kelamin',
+        'no_hp',
+        'alamat',
+        'specialist_id',
+        'doctor_id',
+        'schedule_id',
+        'keluhan'
+    ];
+
+    let valid = true;
+
+    fields.forEach(function(id) {
+        let input = document.getElementById(id);
+
+        if (!input.value.trim()) {
+            input.classList.add('is-invalid');
+            valid = false;
+        } else {
+            input.classList.remove('is-invalid');
+        }
+    });
+
+    if (!valid) {
+        alert('Harap lengkapi semua data pendaftaran terlebih dahulu!');
+        return;
+    }
 
     let form = this;
 
@@ -375,10 +445,13 @@ document.getElementById('patientForm').addEventListener('submit', function(e) {
     .then(data => {
         if (data.success) {
             window.location.href = data.redirect;
+        } else {
+            alert(data.message || 'Pendaftaran gagal. Silakan periksa kembali data.');
         }
     })
     .catch(error => {
         console.error(error);
+        alert('Terjadi kesalahan saat mengirim pendaftaran.');
     });
 });
 </script>

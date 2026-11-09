@@ -14,7 +14,10 @@ class ScheduleController extends Controller
      */
     public function index()
     {
-        $schedules = Schedule::paginate(10);
+        $schedules = Schedule::with('doctor')
+            ->whereDate('tanggal', '>=', today())
+            ->orderBy('tanggal', 'desc')
+            ->get();
 
         return view('pages.schedule.index', compact('schedules'));
     }
@@ -98,12 +101,12 @@ class ScheduleController extends Controller
                 ->withInput();
         }
 
-        DB::transaction(function () use ($request, $hari) {
+        DB::transaction(function () use ($request, $hari, $startWeek) {
 
             foreach ($request->hari as $day) {
 
-                $tanggal = \Carbon\Carbon::parse($request->tanggal)
-                    ->addDays($hari[$day]);
+                $tanggal = $startWeek->copy()
+                ->addDays($hari[$day]);
 
                 if ($tanggal->lt(\Carbon\Carbon::today())) {
                     throw \Illuminate\Validation\ValidationException::withMessages([
@@ -406,7 +409,7 @@ class ScheduleController extends Controller
     /**
      * Get doctors by specialist.
      */
-    public function getDoctorsBySpecialist($specialist_id)
+    public function getDoctorsBySpecialist(int $specialist_id)
     {
         $doctors = Doctor::where('specialist_id', $specialist_id)
             ->where('status', 'aktif')
@@ -418,12 +421,20 @@ class ScheduleController extends Controller
     /**
      * Get schedules by doctor.
      */
-    public function getSchedulesByDoctor($doctor_id)
+    public function getSchedulesByDoctor(int $doctor_id)
     {
         $schedules = Schedule::where('doctor_id', $doctor_id)
             ->where('status', 'aktif')
-            ->where('tanggal', '>=', today())
             ->where('kuota', '>', 0)
+            ->where(function ($query) {
+                $query->whereDate('tanggal', '>', today())
+                    ->orWhere(function ($query) {
+                        $query->whereDate('tanggal', today())
+                            ->where('jam_mulai', '>', now()->format('H:i:s'));
+                    });
+            })
+            ->orderBy('tanggal')
+            ->orderBy('jam_mulai')
             ->get();
 
         return response()->json($schedules);

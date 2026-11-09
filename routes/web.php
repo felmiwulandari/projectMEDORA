@@ -18,6 +18,9 @@ Route::get('/', function () {
     Route::post('/registration', [RegistrationController::class, 'store'])
     ->name('registration.store');
 
+    Route::view('/pendaftaran-berhasil', 'pages.registration.berhasil')
+    ->name('registration.success');
+
 //Route for Doctor page
     Route::get('/get-doctors/{specialist_id}', [ScheduleController::class, 'getDoctorsBySpecialist'])
     ->name('get.doctors');
@@ -33,6 +36,14 @@ Route::get('/', function () {
 // Route untuk Status Pendaftaran
     Route::get('/registration/status/{id}/check', [RegistrationController::class, 'checkStatus'])
     ->name('registration.status.check');
+
+// Route untuk Form Cek Status berdasarkan NIK
+    Route::get('/cek-status', [RegistrationController::class, 'formCheckStatus'])
+        ->name('registration.check.form');
+
+// Route untuk Mencari Status berdasarkan NIK
+    Route::post('/cek-status', [RegistrationController::class, 'searchStatus'])
+        ->name('registration.check');
 
 
 Auth::routes([

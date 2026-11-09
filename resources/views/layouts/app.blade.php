@@ -19,54 +19,133 @@
 
     <!-- Custom styles for this template-->
     <link href="{{ asset('css/sb-admin-2.min.css') }}" rel="stylesheet">
-   <style>
-        .sidebar .nav-item .nav-link {
-            padding-top: 0.65rem;
-            padding-bottom: 0.65rem;
-            font-size: 1.15rem;
-        }
+   <style>     
+    .sidebar .nav-item .nav-link {
+        padding-top: 0.65rem;
+        padding-bottom: 0.65rem;
+        font-size: 1.15rem;
+    }
 
-        .sidebar .nav-item .nav-link i {
-            width: 35px;
-            text-align: center;
-            font-size: 1.4rem;
-        }
+    .sidebar .nav-item .nav-link i {
+        width: 35px;
+        text-align: center;
+        font-size: 1.4rem;
+    }
 
-        .sidebar .nav-item:first-of-type {
-            margin-bottom: 1.2rem;
-        }
+    .sidebar .nav-item:first-of-type {
+        margin-bottom: 1.2rem;
+    }
 
-        .sidebar .nav-item:last-child {
-            margin-top: 1.5rem;
-        }
+    .sidebar .nav-item:last-child {
+        margin-top: 1.5rem;
+    }
 
-        /* Sidebar tetap saat halaman di-scroll */
+    /* SIDEBAR DESKTOP */
+    #accordionSidebar {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 14rem;
+        height: 100vh;
+        z-index: 1030;
+    }
+
+    /* CONTENT DESKTOP */
+    #content-wrapper {
+        margin-left: 14rem;
+        width: calc(100% - 14rem);
+        min-width: 0;
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+    }
+
+    /* NAVBAR DESKTOP */
+    #content-wrapper .navbar {
+        position: fixed;
+        top: 0;
+        right: 0;
+        left: 14rem;
+        z-index: 1020;
+    }
+
+    /* ISI HALAMAN */
+    #content {
+        padding-top: 70px;
+        flex: 1 0 auto;
+    }
+
+    /* FOOTER */
+    #content-wrapper .sticky-footer {
+        margin-top: auto;
+    }
+
+    /* RESPONSIVE HP */
+    @media (max-width: 767.98px) {
+
+        /* Sidebar tersembunyi */
         #accordionSidebar {
-            position: fixed;
-            top: 0;
-            left: 0;
-            height: 100vh;
-            z-index: 1030;
+            width: 6.5rem !important;
+            transform: translateX(-100%);
+            transition: transform 0.3s ease;
         }
 
-        /* Content tidak menutupi sidebar */
+        /* Sidebar muncul saat tombol ditekan */
+        body.sidebar-open #accordionSidebar {
+            transform: translateX(0);
+        }
+
+        #accordionSidebar .nav-item .nav-link {
+            width: 6.5rem;
+        }
+
+        #accordionSidebar .nav-item .nav-link span {
+            display: none;
+        }
+
+        /* Konten memenuhi layar */
         #content-wrapper {
-            margin-left: 224px;
+            margin-left: 0;
+            width: 100%;
         }
 
-        /* Navbar tetap saat halaman di-scroll */
+        /* Navbar memenuhi layar */
         #content-wrapper .navbar {
-            position: fixed;
-            top: 0;
-            right: 0;
-            left: 14rem;
-            z-index: 1020;
+            left: 0;
+            width: 100%;
         }
 
-        /* Supaya content tidak tertutup navbar */
-        #content {
-            padding-top: 70px;
+        .container-fluid {
+            padding-left: 10px;
+            padding-right: 10px;
         }
+
+        body.sidebar-open #content-wrapper {
+            margin-left: 6.5rem;
+            width: calc(100% - 6.5rem);
+        }
+
+        body.sidebar-open #content-wrapper .navbar {
+            left: 6.5rem;
+            width: calc(100% - 6.5rem);
+        }
+    }
+    @media (min-width: 768px) {
+        #accordionSidebar {
+            width: 14rem !important;
+            transform: none !important;
+        }
+
+        #content-wrapper {
+            margin-left: 14rem !important;
+            width: calc(100% - 14rem) !important;
+        }
+
+        #content-wrapper .navbar {
+            left: 14rem !important;
+            width: calc(100% - 14rem) !important;
+        }
+    }
     </style>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert2/11.26.25/sweetalert2.all.min.js"></script>
@@ -149,6 +228,24 @@
             }
         });
     }
+    </script>
+
+    <script>
+    function toggleSidebar() {
+        document.body.classList.toggle('sidebar-open');
+    }
+
+    window.addEventListener('resize', function () {
+        if (window.innerWidth >= 768) {
+            document.body.classList.remove('sidebar-open');
+
+            const sidebar = document.getElementById('accordionSidebar');
+
+            if (sidebar) {
+                sidebar.classList.remove('toggled');
+            }
+        }
+    });
     </script>
 
     @stack('scripts')
