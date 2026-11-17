@@ -148,8 +148,6 @@
     }
     </style>
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert2/11.26.25/sweetalert2.all.min.js"></script>
-
     @stack('styles')
 
 </head>

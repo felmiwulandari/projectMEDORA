@@ -19,7 +19,7 @@ class RegistrationController extends Controller
             'schedule.doctor.specialist',      // Ambil dokter lewat schedule
         ])
         ->orderBy('created_at', 'desc')
-        ->paginate(10);
+        ->get();
 
         return view('pages.registration.index', compact('registrations'));
     }

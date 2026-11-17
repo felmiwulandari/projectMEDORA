@@ -89,7 +89,7 @@
                         @endforeach
                     </tbody>
                 </table>
-                {{ $registrations->links() }}
+                
             </div>
         </div>
     </div>
@@ -131,7 +131,7 @@
 
             // SweetAlert KONFIRMASI 
            $(document).on('click', '.btn-approve', function () {
-                let form = this.closest('form');
+                let form = $(this).closest('form');
 
                 Swal.fire({
                     title: 'Konfirmasi Pendaftaran?',
@@ -142,14 +142,14 @@
                     cancelButtonText: 'Batal'
                 }).then((result) => {
                     if (result.isConfirmed) {
-                        form.submit();
+                        form[0].submit();
                     }
                 });
             });
 
             // SweetAlert TOLAK 
             $(document).on('click', '.btn-reject', function () {
-                let form = this.closest('form');
+                let form = $(this).closest('form');
 
                 Swal.fire({
                     title: 'Tolak Pendaftaran?',
@@ -160,7 +160,7 @@
                     cancelButtonText: 'Batal'
                 }).then((result) => {
                     if (result.isConfirmed) {
-                        form.submit();
+                        form[0].submit();
                     }
                 });
             });
@@ -191,9 +191,20 @@
     @endif
     <script>
         setInterval(function() {
+
+            // Jangan refresh ketika SweetAlert sedang terbuka
+            if (Swal.isVisible()) {
+                return;
+            }
+
             fetch(window.location.href)
                 .then(response => response.text())
                 .then(html => {
+
+                    // Periksa lagi sebelum mengganti isi tabel
+                    if (Swal.isVisible()) {
+                        return;
+                    }
 
                     let parser = new DOMParser();
                     let doc = parser.parseFromString(html, 'text/html');
